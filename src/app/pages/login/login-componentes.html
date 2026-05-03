@@ -1,0 +1,119 @@
+<div class="login-page">
+
+  <!-- Panel izquierdo decorativo -->
+  <div class="login-aside">
+    <div class="aside-logo" (click)="irAInicio()">
+      <span class="aside-logo-icon">🐾</span>
+      <span class="aside-logo-text">AMAPETS</span>
+    </div>
+
+    <div class="aside-content">
+      <h2 class="aside-title">Bienvenido de vuelta</h2>
+      <p class="aside-desc">Accede a tu cuenta para gestionar las citas y el perfil de tus mascotas.</p>
+
+      <div class="aside-features">
+        <div class="aside-feature">
+          <span class="feature-icon">📋</span>
+          <span>Historial de citas</span>
+        </div>
+        <div class="aside-feature">
+          <span class="feature-icon">🐶</span>
+          <span>Perfil de tus mascotas</span>
+        </div>
+        <div class="aside-feature">
+          <span class="feature-icon">🔔</span>
+          <span>Recordatorios automáticos</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="aside-bubbles">
+      <div class="ab ab1"></div>
+      <div class="ab ab2"></div>
+      <div class="ab ab3"></div>
+    </div>
+  </div>
+
+  <!-- Panel derecho con formulario -->
+  <div class="login-main">
+    <div class="login-card">
+
+      <div class="login-header">
+        <h1 class="login-title">Iniciar sesión</h1>
+        <p class="login-subtitle">Ingresa tus credenciales para continuar</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()" novalidate>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉️</span>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="tu@email.com"
+              title="Correo electrónico"
+              autocomplete="email">
+          </div>
+          @if (f['email'].invalid && f['email'].touched) {
+            <span class="form-error">
+              @if (f['email'].errors?.['required']) { El email es obligatorio }
+              @if (f['email'].errors?.['email']) { Ingresa un email válido }
+            </span>
+          }
+        </div>
+
+        <!-- Contraseña -->
+        <div class="form-group">
+          <label for="contrasena">Contraseña</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input
+              id="contrasena"
+              [type]="mostrarPassword ? 'text' : 'password'"
+              formControlName="contrasena"
+              placeholder="Mínimo 6 caracteres"
+              title="Contraseña"
+              autocomplete="current-password">
+            <button type="button" class="toggle-pass" (click)="togglePassword()">
+              {{ mostrarPassword ? '🙈' : '👁️' }}
+            </button>
+          </div>
+          @if (f['contrasena'].invalid && f['contrasena'].touched) {
+            <span class="form-error">
+              @if (f['contrasena'].errors?.['required']) { La contraseña es obligatoria }
+              @if (f['contrasena'].errors?.['minlength']) { Mínimo 6 caracteres }
+            </span>
+          }
+        </div>
+
+        <div class="form-extras">
+          <a class="forgot-link">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        @if (errorMsg) {
+          <div class="login-error">{{ errorMsg }}</div>
+        }
+
+        <button type="submit" class="btn-login" [class.loading]="cargando" [disabled]="cargando">
+          @if (cargando) {
+            <span class="spinner"></span> Ingresando...
+          } @else {
+            Ingresar
+          }
+        </button>
+
+      </form>
+
+      <div class="login-footer">
+        <span>¿No tienes cuenta?</span>
+        <a class="register-link" href="registro-componentes.html">Regístrate aquí</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>

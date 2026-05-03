@@ -1,0 +1,136 @@
+<div class="perfil-page">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="sidebar-logo-icon">🐾</span>
+      <span class="sidebar-logo-text">AMAPETS</span>
+    </div>
+
+    <div class="sidebar-usuario">
+      <div class="usuario-avatar">{{ iniciales() }}</div>
+      <div class="usuario-info">
+        <p class="usuario-nombre">{{ usuario.nombre }}</p>
+        <p class="usuario-email">{{ usuario.email }}</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button
+        class="nav-item"
+        [class.active]="seccionActiva === 'mascotas'"
+        (click)="cambiarSeccion('mascotas')">
+        <span class="nav-item-icon">🐾</span>
+        Mis mascotas
+      </button>
+      <button
+        class="nav-item"
+        [class.active]="seccionActiva === 'citas'"
+        (click)="cambiarSeccion('citas')">
+        <span class="nav-item-icon">📋</span>
+        Mis citas
+        @if (citasPendientes() > 0) {
+          <span class="nav-badge">{{ citasPendientes() }}</span>
+        }
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-nueva-cita" (click)="nuevaCita()">
+        + Nueva cita
+      </button>
+      <button class="btn-cerrar" (click)="cerrarSesion()">
+        Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="perfil-main">
+
+    <!-- Header -->
+    <div class="main-header">
+      <div>
+        <h1 class="main-title">
+          @if (seccionActiva === 'mascotas') { Mis mascotas }
+          @if (seccionActiva === 'citas') { Mis citas }
+        </h1>
+        <p class="main-sub">
+          @if (seccionActiva === 'mascotas') {
+            Tienes {{ mascotas.length }} mascota{{ mascotas.length !== 1 ? 's' : '' }} registrada{{ mascotas.length !== 1 ? 's' : '' }}
+          }
+          @if (seccionActiva === 'citas') {
+            {{ citasPendientes() }} cita{{ citasPendientes() !== 1 ? 's' : '' }} próxima{{ citasPendientes() !== 1 ? 's' : '' }}
+          }
+        </p>
+      </div>
+      <button class="btn-accion" (click)="nuevaCita()">+ Agendar cita</button>
+    </div>
+
+    <!-- ===== SECCIÓN MASCOTAS ===== -->
+    @if (seccionActiva === 'mascotas') {
+      <div class="mascotas-grid">
+        @for (m of mascotas; track m.id) {
+          <div class="mascota-card" [class]="'mascota-card mascota-' + m.colorClase">
+            <div class="mascota-top">
+              <div class="mascota-emoji-wrap">
+                <span class="mascota-emoji">{{ m.emoji }}</span>
+              </div>
+              <div class="mascota-info">
+                <h3 class="mascota-nombre">{{ m.nombre }}</h3>
+                <p class="mascota-raza">{{ m.raza }}</p>
+              </div>
+              <span class="mascota-especie-badge">{{ etiquetaEspecie(m.especie) }}</span>
+            </div>
+
+            <div class="mascota-stats">
+              <div class="mstat">
+                <span class="mstat-label">Edad</span>
+                <span class="mstat-val">{{ m.edad }} año{{ m.edad !== 1 ? 's' : '' }}</span>
+              </div>
+              <div class="mstat">
+                <span class="mstat-label">Peso</span>
+                <span class="mstat-val">{{ m.peso }} kg</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Tarjeta añadir mascota -->
+        <div class="mascota-card mascota-add" (click)="nuevaCita()">
+          <div class="add-icon">+</div>
+          <p class="add-text">Añadir mascota</p>
+        </div>
+      </div>
+    }
+
+    <!-- ===== SECCIÓN CITAS ===== -->
+    @if (seccionActiva === 'citas') {
+      <div class="citas-lista">
+        @for (c of citas; track c.id) {
+          <div class="cita-item">
+            <div class="cita-fecha-col">
+              <span class="cita-fecha">{{ formatFecha(c.fecha) }}</span>
+              <span class="cita-hora">{{ c.hora }}</span>
+            </div>
+
+            <div class="cita-divider"></div>
+
+            <div class="cita-info">
+              <p class="cita-servicio">{{ c.servicio }}</p>
+              <p class="cita-detalle">{{ c.mascotaNombre }} · {{ c.veterinario }}</p>
+            </div>
+
+            <span class="cita-estado" [class]="'estado-' + c.estado">
+              @if (c.estado === 'confirmada') { Confirmada }
+              @if (c.estado === 'pendiente')  { Pendiente }
+              @if (c.estado === 'completada') { Completada }
+              @if (c.estado === 'cancelada')  { Cancelada }
+            </span>
+          </div>
+        }
+      </div>
+    }
+
+  </main>
+</div>

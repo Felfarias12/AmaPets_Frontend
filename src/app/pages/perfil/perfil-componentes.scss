@@ -1,0 +1,459 @@
+@use 'sass:color';
+
+$teal:        #1D9E75;
+$teal-light:  #E1F5EE;
+$teal-dark:   #0F6E56;
+$teal-deep:   #085041;
+$coral:       #D85A30;
+$coral-light: #FAECE7;
+$amber:       #BA7517;
+$amber-light: #FAEEDA;
+$amber-mid:   #EF9F27;
+$purple:      #534AB7;
+$purple-light:#EEEDFE;
+$green-deep:  #173404;
+$text:        #1a1a1a;
+$muted:       #6b7280;
+$bg:          #ffffff;
+$bg2:         #f9fafb;
+$border:      rgba(0,0,0,0.08);
+
+$font-sans: 'Nunito', sans-serif;
+$font-serif: 'Fraunces', serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fraunces:ital,wght@0,700;1,700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
+
+// =============================================
+// LAYOUT
+// =============================================
+.perfil-page {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+  background: $bg2;
+}
+
+// =============================================
+// SIDEBAR
+// =============================================
+.sidebar {
+  background: $green-deep;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 20px;
+  gap: 32px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &-icon {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+
+  &-text {
+    font-family: $font-serif;
+    font-size: 18px;
+    font-style: italic;
+    color: white;
+  }
+}
+
+.sidebar-usuario {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 12px;
+}
+
+.usuario-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: $teal;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+
+.usuario-nombre {
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+}
+
+.usuario-email {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 2px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.65);
+  font-family: $font-sans;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, color 0.2s;
+  position: relative;
+
+  &:hover { background: rgba(255,255,255,0.08); color: white; }
+
+  &.active {
+    background: $teal;
+    color: white;
+  }
+
+  &-icon { font-size: 16px; }
+}
+
+.nav-badge {
+  margin-left: auto;
+  background: $amber-mid;
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 100px;
+}
+
+.sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-nueva-cita {
+  width: 100%;
+  padding: 11px;
+  background: $teal;
+  color: white;
+  font-family: $font-sans;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover { background: $teal-dark; }
+}
+
+.btn-cerrar {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: rgba(255,255,255,0.45);
+  font-family: $font-sans;
+  font-size: 13px;
+  font-weight: 600;
+  border: 0.5px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+
+  &:hover { color: white; border-color: rgba(255,255,255,0.35); }
+}
+
+// =============================================
+// MAIN
+// =============================================
+.perfil-main {
+  padding: 36px 40px;
+  max-width: 900px;
+}
+
+.main-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.main-title {
+  font-family: $font-serif;
+  font-size: 28px;
+  font-style: italic;
+  color: $teal-dark;
+  margin-bottom: 4px;
+}
+
+.main-sub {
+  font-size: 13px;
+  color: $muted;
+}
+
+.btn-accion {
+  background: $teal;
+  color: white;
+  font-family: $font-sans;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  border-radius: 9px;
+  padding: 10px 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.15s;
+
+  &:hover { background: $teal-dark; transform: translateY(-1px); }
+}
+
+// =============================================
+// MASCOTAS
+// =============================================
+.mascotas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 18px;
+}
+
+.mascota-card {
+  background: $bg;
+  border: 0.5px solid $border;
+  border-radius: 16px;
+  padding: 22px 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+  }
+}
+
+.mascota-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.mascota-emoji-wrap {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.mascota-teal  .mascota-emoji-wrap { background: $teal-light; }
+.mascota-coral .mascota-emoji-wrap { background: $coral-light; }
+.mascota-amber .mascota-emoji-wrap { background: $amber-light; }
+.mascota-purple .mascota-emoji-wrap { background: $purple-light; }
+
+.mascota-nombre {
+  font-size: 15px;
+  font-weight: 800;
+  color: $text;
+}
+
+.mascota-raza {
+  font-size: 12px;
+  color: $muted;
+  margin-top: 2px;
+}
+
+.mascota-especie-badge {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background: $teal-light;
+  color: $teal-dark;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+.mascota-stats {
+  display: flex;
+  gap: 24px;
+  padding-top: 14px;
+  border-top: 0.5px solid $border;
+}
+
+.mstat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  &-label {
+    font-size: 11px;
+    color: $muted;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &-val {
+    font-size: 15px;
+    font-weight: 800;
+    color: $text;
+  }
+}
+
+.mascota-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1.5px dashed rgba(0,0,0,0.12);
+  background: transparent;
+  cursor: pointer;
+  min-height: 140px;
+
+  &:hover {
+    border-color: $teal;
+    background: $teal-light;
+    transform: translateY(-4px);
+  }
+}
+
+.add-icon {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: $teal-light;
+  color: $teal-dark;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.add-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: $muted;
+}
+
+// =============================================
+// CITAS
+// =============================================
+.citas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cita-item {
+  background: $bg;
+  border: 0.5px solid $border;
+  border-radius: 14px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: transform 0.15s;
+
+  &:hover { transform: translateX(4px); }
+}
+
+.cita-fecha-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 90px;
+}
+
+.cita-fecha {
+  font-size: 13px;
+  font-weight: 700;
+  color: $text;
+}
+
+.cita-hora {
+  font-size: 12px;
+  color: $muted;
+}
+
+.cita-divider {
+  width: 1px;
+  height: 36px;
+  background: $border;
+  flex-shrink: 0;
+}
+
+.cita-info { flex: 1; }
+
+.cita-servicio {
+  font-size: 14px;
+  font-weight: 700;
+  color: $text;
+  margin-bottom: 3px;
+}
+
+.cita-detalle {
+  font-size: 12px;
+  color: $muted;
+}
+
+.cita-estado {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 100px;
+  white-space: nowrap;
+
+  &.estado-confirmada { background: $teal-light;   color: $teal-dark; }
+  &.estado-pendiente  { background: $amber-light;  color: $amber; }
+  &.estado-completada { background: $bg2;           color: $muted; }
+  &.estado-cancelada  { background: $coral-light;  color: $coral; }
+}
+
+// =============================================
+// RESPONSIVE
+// =============================================
+@media (max-width: 768px) {
+  .perfil-page { grid-template-columns: 1fr; }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .sidebar-logo { flex: 1; }
+  .sidebar-usuario { display: none; }
+  .sidebar-nav { flex-direction: row; flex: 100%; }
+  .sidebar-footer { flex-direction: row; flex: 100%; }
+
+  .perfil-main { padding: 24px 16px; }
+  .mascotas-grid { grid-template-columns: 1fr 1fr; }
+
+  .cita-item { flex-wrap: wrap; }
+  .cita-divider { display: none; }
+}

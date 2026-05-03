@@ -1,0 +1,333 @@
+@use 'sass:color';
+
+$teal:        #1D9E75;
+$teal-light:  #E1F5EE;
+$teal-dark:   #0F6E56;
+$teal-deep:   #085041;
+$coral:       #D85A30;
+$coral-light: #FAECE7;
+$amber-mid:   #EF9F27;
+$green-deep:  #173404;
+$text:        #1a1a1a;
+$muted:       #6b7280;
+$bg:          #ffffff;
+$bg2:         #f9fafb;
+$border:      rgba(0,0,0,0.09);
+
+$font-sans: 'Nunito', sans-serif;
+$font-serif: 'Fraunces', serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fraunces:ital,wght@0,700;1,700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
+
+// =============================================
+// LAYOUT
+// =============================================
+.login-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+// =============================================
+// ASIDE IZQUIERDO
+// =============================================
+.login-aside {
+  background: linear-gradient(160deg, #5DCAA5 0%, #1D9E75 50%, #0F6E56 100%);
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.aside-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  z-index: 1;
+  position: relative;
+
+  &-icon {
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  &-text {
+    font-family: $font-serif;
+    font-size: 22px;
+    font-style: italic;
+    color: white;
+  }
+}
+
+.aside-content {
+  z-index: 1;
+  position: relative;
+}
+
+.aside-title {
+  font-family: $font-serif;
+  font-size: 36px;
+  font-style: italic;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+.aside-desc {
+  font-size: 15px;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 320px;
+}
+
+.aside-features {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.aside-feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+
+  .feature-icon {
+    width: 38px; height: 38px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+}
+
+.aside-bubbles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ab {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+
+  &.ab1 { width: 200px; height: 200px; bottom: -60px; right: -60px; }
+  &.ab2 { width: 120px; height: 120px; top: 30%; right: 20px; }
+  &.ab3 { width: 60px;  height: 60px;  top: 15%; left: 30%; }
+}
+
+// =============================================
+// MAIN DERECHO
+// =============================================
+.login-main {
+  background: $bg2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+}
+
+.login-card {
+  background: $bg;
+  border: 0.5px solid $border;
+  border-radius: 20px;
+  padding: 44px 40px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-header {
+  margin-bottom: 32px;
+}
+
+.login-title {
+  font-family: $font-serif;
+  font-size: 28px;
+  font-style: italic;
+  color: $teal-dark;
+  margin-bottom: 6px;
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: $muted;
+}
+
+// =============================================
+// FORM
+// =============================================
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+
+  label {
+    font-size: 13px;
+    font-weight: 700;
+    color: $text;
+  }
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .input-icon {
+    position: absolute;
+    left: 12px;
+    font-size: 16px;
+    pointer-events: none;
+  }
+
+  input {
+    width: 100%;
+    padding: 11px 12px 11px 40px;
+    border: 0.5px solid $border;
+    border-radius: 10px;
+    background: $bg2;
+    font-family: $font-sans;
+    font-size: 14px;
+    color: $text;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus {
+      border-color: $teal;
+      box-shadow: 0 0 0 3px rgba($teal, 0.12);
+      background: $bg;
+    }
+
+    &::placeholder { color: lighten($muted, 20%); }
+  }
+}
+
+.toggle-pass {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  line-height: 1;
+}
+
+.form-error {
+  font-size: 12px;
+  color: $coral;
+  font-weight: 600;
+}
+
+.form-extras {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+  margin-top: -10px;
+}
+
+.forgot-link {
+  font-size: 13px;
+  color: $teal;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+.login-error {
+  background: $coral-light;
+  color: $coral;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 13px;
+  background: $teal;
+  color: white;
+  font-family: $font-sans;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s, transform 0.15s;
+
+  &:hover:not(:disabled) {
+    background: $teal-dark;
+    transform: translateY(-2px);
+  }
+
+  &:disabled { opacity: 0.7; cursor: not-allowed; }
+
+  &.loading { opacity: 0.85; }
+}
+
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.login-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: $muted;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.register-link {
+  color: $teal;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+// =============================================
+// RESPONSIVE
+// =============================================
+@media (max-width: 768px) {
+  .login-page { grid-template-columns: 1fr; }
+  .login-aside { display: none; }
+  .login-main { min-height: 100vh; padding: 24px 16px; }
+  .login-card { padding: 32px 24px; }
+}
