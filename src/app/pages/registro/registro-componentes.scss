@@ -1,0 +1,173 @@
+@use 'sass:color';
+
+$teal:        #1D9E75;
+$teal-light:  #E1F5EE;
+$teal-dark:   #0F6E56;
+$teal-deep:   #085041;
+$coral:       #D85A30;
+$coral-light: #FAECE7;
+$amber-mid:   #EF9F27;
+$green-deep:  #173404;
+$text:        #1a1a1a;
+$muted:       #6b7280;
+$bg:          #ffffff;
+$bg2:         #f9fafb;
+$border:      rgba(0,0,0,0.09);
+
+$font-sans: 'Nunito', sans-serif;
+$font-serif: 'Fraunces', serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fraunces:ital,wght@0,700;1,700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
+
+// =============================================
+// LAYOUT
+// =============================================
+.registro-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+// =============================================
+// ASIDE IZQUIERDO
+// =============================================
+.registro-aside {
+  background: linear-gradient(160deg, #5DCAA5 0%, #1D9E75 50%, #0F6E56 100%);
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.aside-logo{
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    z-index: 1;
+    position: relative;
+    
+    &-icon {
+        width: 40px; height: 40px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+
+        }    
+    &-text {
+        font-family: $font-serif;
+        font-size: 20px;
+        font-style: italic;
+        color: white;
+    }
+}
+
+.aside-content {
+    z-index: 1;
+    position: relative;
+}
+
+.aside-title{
+    font-family: $font-serif;
+    font-size: 36px;
+    font-style: italic;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.aside-desc{
+    font-size: 15px;
+    color:white;
+    line-height:1.7;
+    margin-bottom: 36px;
+    max-width: 320px;
+}
+
+.aside-features {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.aside-feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+
+  .feature-icon {
+    width: 38px; height: 38px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+}
+
+.aside-bubbles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ab {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+
+  &.ab1 { width: 200px; height: 200px; bottom: -60px; right: -60px; }
+  &.ab2 { width: 120px; height: 120px; top: 30%; right: 20px; }
+  &.ab3 { width: 60px;  height: 60px;  top: 15%; left: 30%; }
+}
+
+// =============================================
+// MAIN DERECHO
+// =============================================
+.registro-main{
+    background: $bg2;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 32px;
+}
+
+.registro-card{
+    background: $bg;
+    border: 0.5px solid $border;
+    border-radius: 20px;
+    padding: 44px 40px;
+    width: 100%;
+    max-width: 420px;
+}
+
+.registro-header{
+    margin-bottom: 32px;
+}
+
+.registro-title{
+    font-family: $font-serif;
+    font-size: 28px;
+    font-style: italic;
+    color: $teal-dark;
+    margin-bottom: 6px;
+}
+
+.login-subtitle {
+    font-size: 14px;
+    color: $muted;
+}
+
+// =============================================
+//formulario
+// =============================================

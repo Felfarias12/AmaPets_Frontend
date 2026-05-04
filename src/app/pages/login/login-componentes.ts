@@ -52,4 +52,8 @@ export class LoginComponent implements OnInit {
   irAInicio(): void {
     this.router.navigate(['/']);
   }
+
+  irARegistro(): void {
+    this.router.navigate(['/registro']);
+  }
 }

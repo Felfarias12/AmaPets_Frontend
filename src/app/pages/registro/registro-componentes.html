@@ -1,0 +1,38 @@
+<div class="registro-page">
+  <h2>Registro de Usuario</h2>
+  <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+    <!-- Nombre -->
+    <div class="form-group">
+      <label for="nombre">Nombre completo</label>
+      <div class="input-wrap">
+        <span class="input-icon"></span>
+        <input type="text" id="nombre" formControlName="nombre" class="form-control">
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Correo electrónico</label>
+      <div class="input-wrap">
+        <span class="input-icon"></span>
+        <input type="email" id="email" formControlName="email" class="form-control">
+      </div>
+    </div>
+
+    <!-- Contraseña -->
+    <div class="form-group">
+      <label for="contrasena">Contraseña</label>
+      <div class="input-wrap">
+        <span class="input-icon"></span>
+        <input type="{{ mostrarPassword ? 'text' : 'password' }}" id="contrasena" formControlName="contrasena" class="form-control">
+        <button type="button" (click)="togglePassword()" class="btn btn-outline-secondary">Mostrar</button>
+      </div>
+    </div>
+
+    <!-- Botón de envío -->
+    <div class="form-group">
+      <button type="submit" [disabled]="cargando" class="btn btn-primary">Registrarse</button>
+    </div>
+  </form>
+</div>
+
