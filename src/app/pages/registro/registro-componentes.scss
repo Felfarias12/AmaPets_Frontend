@@ -148,7 +148,7 @@ body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
     border-radius: 20px;
     padding: 44px 40px;
     width: 100%;
-    max-width: 420px;
+    max-width: 700px;
 }
 
 .registro-header{
@@ -157,17 +157,177 @@ body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
 
 .registro-title{
     font-family: $font-serif;
-    font-size: 28px;
+    font-size: 50px;
     font-style: italic;
     color: $teal-dark;
     margin-bottom: 6px;
 }
 
-.login-subtitle {
-    font-size: 14px;
+.registro-subtitle {
+    font-size: 30px;
     color: $muted;
 }
 
 // =============================================
 //formulario
 // =============================================
+.form-group{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+
+    label{
+        font-size: 14px;
+        color: $text;
+        font-weight: 600;
+    }
+}
+
+.input-wrap{
+    position: relative;
+    display:flex;
+    align-items:center;
+
+    .input-icon{
+        position: absolute;
+        left: 12px;
+        font-size: 16px;
+        pointer-events: none;
+    }
+
+    input{
+        width: 100%;
+        padding: 10px 12px 10px 36px;
+        border: 0.5px solid $border;
+        border-radius: 8px;
+        background: $bg2;
+        font-family: $font-sans;
+        font-size: 14px;
+        color: $text;
+        outline:none;
+        transition: border-color 0.2s box-shadow 0.2s;
+
+        &:focus{
+            border-color: $teal;
+            box-shadow: 0 0 0 3px rgba($teal, 0.2);
+            background: $bg;
+        }
+        &::placeholder{color: lighten($muted, 20%);
+        }
+    }
+}
+
+.toggle-pass {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  line-height: 1;
+}
+
+.form-error {
+  font-size: 12px;
+  color: $coral;
+  font-weight: 600;
+}
+
+.form-extras {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+  margin-top: -10px;
+}
+
+.forgot-link {
+  font-size: 13px;
+  color: $teal;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+.registro-error{
+    background: $coral-light;
+    color: $coral;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.btn-registro{
+  width: 100%;
+  padding: 13px;
+  background: $teal;
+  color: white;
+  font-family: $font-sans;
+  font-size: 25px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s, transform 0.15s;
+
+  &:hover:not(:disabled) {
+    background: $teal-dark;
+    transform: translateY(-2px);
+  }
+
+  &:disabled { opacity: 0.7; cursor: not-allowed; }
+
+  &.loading { opacity: 0.85; }
+}
+
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.registro-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: $muted;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.register-link {
+  color: $teal;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+// =============================================
+// RESPONSIVE
+// =============================================
+@media (max-width: 768px) {
+  .login-page { grid-template-columns: 1fr; }
+  .login-aside { display: none; }
+  .login-main { min-height: 100vh; padding: 24px 16px; }
+  .login-card { padding: 32px 24px; }
+}

@@ -1,5 +1,11 @@
 <div class="registro-page">
-  <h2>Registro de Usuario</h2>
+    <!-- Panel derecho con formulario -->
+  <div class="registro-main">
+    <div class="registro-card">
+      <div class="registro-header">
+        <h1 class="registro-title">Registro</h1>
+        <p class="registro-subtitle">Completa el formulario para registrarte</p>
+      </div>
   <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
     <!-- Nombre -->
     <div class="form-group">
@@ -10,29 +16,73 @@
       </div>
     </div>
 
-    <!-- Email -->
-    <div class="form-group">
-      <label for="email">Correo electrónico</label>
-      <div class="input-wrap">
-        <span class="input-icon"></span>
-        <input type="email" id="email" formControlName="email" class="form-control">
-      </div>
-    </div>
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉️</span>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="tu@email.com"
+              title="Correo electrónico"
+              autocomplete="email">
+          </div>
+          @if (f['email'].invalid && f['email'].touched) {
+            <span class="form-error">
+              @if (f['email'].errors?.['required']) { El email es obligatorio }
+              @if (f['email'].errors?.['email']) { Ingresa un email válido }
+            </span>
+          }
+        </div>
 
-    <!-- Contraseña -->
-    <div class="form-group">
-      <label for="contrasena">Contraseña</label>
-      <div class="input-wrap">
-        <span class="input-icon"></span>
-        <input type="{{ mostrarPassword ? 'text' : 'password' }}" id="contrasena" formControlName="contrasena" class="form-control">
-        <button type="button" (click)="togglePassword()" class="btn btn-outline-secondary">Mostrar</button>
-      </div>
-    </div>
+        <!-- Contraseña -->
+        <div class="form-group">
+          <label for="contrasena">Contraseña</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input
+              id="contrasena"
+              [type]="mostrarPassword ? 'text' : 'password'"
+              formControlName="contrasena"
+              placeholder="Mínimo 6 caracteres"
+              title="Contraseña"
+              autocomplete="current-password">
+            <button type="button" class="toggle-pass" (click)="togglePassword()">
+              {{ mostrarPassword ? '🙈' : '👁️' }}
+            </button>
+          </div>
+          @if (f['contrasena'].invalid && f['contrasena'].touched) {
+            <span class="form-error">
+              @if (f['contrasena'].errors?.['required']) { La contraseña es obligatoria }
+              @if (f['contrasena'].errors?.['minlength']) { Mínimo 6 caracteres }
+            </span>
+          }
+        </div>
 
-    <!-- Botón de envío -->
-    <div class="form-group">
-      <button type="submit" [disabled]="cargando" class="btn btn-primary">Registrarse</button>
+        @if (errorMsg) {
+          <div class="login-error">{{ errorMsg }}</div>
+        }
+
+        <button type="submit" class="btn-registro" [class.loading]="cargando" [disabled]="cargando">
+          @if (cargando) {
+            <span class="spinner"></span> Ingresando...
+          } @else {
+            Ingresar
+          }
+        </button>
+
+      </form>
+
+      <div class="registro-footer">
+        <span>¿ya tienes cuenta?</span>
+        <a class="register-link" (click)="irALogin()">Inicia sesión</a>
+      </div>
+
     </div>
-  </form>
+  </div>
+
 </div>
+
 
