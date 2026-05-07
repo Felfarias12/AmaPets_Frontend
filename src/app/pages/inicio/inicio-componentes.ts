@@ -6,6 +6,9 @@ import { Veterinario } from '../../models/veterinario.model';
 import { Cita, Estadistica } from '../../models/cita.model';
 import { Router } from '@angular/router';
 
+// ✅ IMPORTAR SERVICIO
+import { ConsultaService } from '../../service/consulta-service';
+
 @Component({
   selector: 'app-inicio',
   standalone: true,
@@ -18,6 +21,9 @@ export class InicioComponent implements OnInit {
   citaForm!: FormGroup;
   citaEnviada = false;
   menuAbierto = false;
+
+  // 🔥 LISTA DE CONSULTAS (BACKEND)
+  consultas: any[] = [];
 
   estadisticas: Estadistica[] = [
     { valor: '+2.400', etiqueta: 'Pacientes felices' },
@@ -86,9 +92,15 @@ export class InicioComponent implements OnInit {
   especies = ['Perro', 'Gato', 'Conejo', 'Ave', 'Otro'];
   serviciosOpciones = ['Consulta general', 'Vacunación', 'Odontología', 'Peluquería', 'Urgencias'];
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private consultaService: ConsultaService
+  ) {}
 
   ngOnInit(): void {
+
+    // FORM
     this.citaForm = this.fb.group({
       nombreDuenio: ['', [Validators.required, Validators.minLength(2)]],
       telefono:     ['', [Validators.required, Validators.pattern(/^\+?[0-9\s\-]{7,15}$/)]],
@@ -97,24 +109,70 @@ export class InicioComponent implements OnInit {
       servicio:     ['Consulta general', Validators.required],
       fecha:        ['', Validators.required]
     });
+
+    // 🔥 GET CONSULTAS
+    this.cargarConsultas();
+  }
+
+  // =========================
+  // 🔵 GET
+  // =========================
+  cargarConsultas() {
+    this.consultaService.obtenerConsultas().subscribe({
+      next: (resp: any) => {
+        console.log('✅ Datos desde backend:', resp);
+        this.consultas = resp;
+      },
+      error: (err: any) => {
+        console.error('❌ Error al conectar:', err);
+      }
+    });
   }
 
   get f() { return this.citaForm.controls; }
 
+  // =========================
+  // 🟢 POST
+  // =========================
   enviarCita(): void {
     if (this.citaForm.invalid) {
       this.citaForm.markAllAsTouched();
       return;
     }
+
     const cita: Cita = this.citaForm.value;
-    console.log('Cita agendada:', cita);
+
+    const nuevaConsulta = {
+      Id_consulta: 0,
+      fecha_consulta: new Date(cita.fecha),
+      motivo: cita.servicio,
+      diagnostico: 'Pendiente',
+      tratamiento: 'Pendiente'
+    };
+
+    this.consultaService.crearConsulta(nuevaConsulta).subscribe({
+      next: (resp: any) => {
+        console.log('✅ Guardado en backend:', resp);
+
+        // 🔄 refrescar lista
+        this.cargarConsultas();
+      },
+      error: (err: any) => {
+        console.error('❌ Error al guardar:', err);
+      }
+    });
+
     this.citaEnviada = true;
+
     setTimeout(() => {
       this.citaEnviada = false;
       this.citaForm.reset({ especie: 'Perro', servicio: 'Consulta general' });
     }, 4000);
   }
 
+  // =========================
+  // UI
+  // =========================
   scrollA(seccion: string): void {
     document.getElementById(seccion)?.scrollIntoView({ behavior: 'smooth' });
     this.menuAbierto = false;
@@ -128,7 +186,7 @@ export class InicioComponent implements OnInit {
     return new Date().toISOString().split('T')[0];
   }
 
-    irALogin(): void {
+  irALogin(): void {
     this.router.navigate(['/login']);
   }
 }
