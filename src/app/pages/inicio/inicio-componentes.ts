@@ -6,8 +6,7 @@ import { Veterinario } from '../../models/veterinario.model';
 import { Cita, Estadistica } from '../../models/cita.model';
 import { Router } from '@angular/router';
 
-// ✅ IMPORTAR SERVICIO
-import { ConsultaService } from '../../service/consulta-service';
+import { ConsultaService, type bodyAgregaConsulta } from '../../service/consulta-service';
 
 @Component({
   selector: 'app-inicio',
@@ -19,11 +18,13 @@ import { ConsultaService } from '../../service/consulta-service';
 export class InicioComponent implements OnInit {
 
   citaForm!: FormGroup;
+  formConsulta!: FormGroup;
+
   citaEnviada = false;
   menuAbierto = false;
 
-  // 🔥 LISTA DE CONSULTAS (BACKEND)
-  consultas: any[] = [];
+  // 🔥 LISTA DE CONSULTAS
+  consultas: bodyAgregaConsulta[] = [];
 
   estadisticas: Estadistica[] = [
     { valor: '+2.400', etiqueta: 'Pacientes felices' },
@@ -90,7 +91,14 @@ export class InicioComponent implements OnInit {
   ];
 
   especies = ['Perro', 'Gato', 'Conejo', 'Ave', 'Otro'];
-  serviciosOpciones = ['Consulta general', 'Vacunación', 'Odontología', 'Peluquería', 'Urgencias'];
+
+  serviciosOpciones = [
+    'Consulta general',
+    'Vacunación',
+    'Odontología',
+    'Peluquería',
+    'Urgencias'
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -100,41 +108,57 @@ export class InicioComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // FORM
+    // 🔵 FORMULARIO CITA
     this.citaForm = this.fb.group({
       nombreDuenio: ['', [Validators.required, Validators.minLength(2)]],
-      telefono:     ['', [Validators.required, Validators.pattern(/^\+?[0-9\s\-]{7,15}$/)]],
-      nombreMascota:['', Validators.required],
-      especie:      ['Perro', Validators.required],
-      servicio:     ['Consulta general', Validators.required],
-      fecha:        ['', Validators.required]
+      telefono: ['', [Validators.required, Validators.pattern(/^\+?[0-9\s\-]{7,15}$/)]],
+      nombreMascota: ['', Validators.required],
+      especie: ['Perro', Validators.required],
+      servicio: ['Consulta general', Validators.required],
+      fecha: ['', Validators.required]
     });
 
-    // 🔥 GET CONSULTAS
+    // 🔵 FORMULARIO CONSULTA
+    this.formConsulta = this.fb.group({
+      Id_consulta: [0],
+      fecha_consulta: ['', Validators.required],
+      motivo: ['', [Validators.required, Validators.minLength(3)]],
+      diagnostico: ['', [Validators.required, Validators.minLength(3)]],
+      tratamiento: ['', [Validators.required, Validators.minLength(3)]]
+    });
+
+    // 🔥 CARGAR CONSULTAS
     this.cargarConsultas();
   }
 
   // =========================
-  // 🔵 GET
+  // 🔵 GET CONSULTAS
   // =========================
-  cargarConsultas() {
+  cargarConsultas(): void {
+
     this.consultaService.obtenerConsultas().subscribe({
-      next: (resp: any) => {
+
+      next: (resp: bodyAgregaConsulta[]) => {
         console.log('✅ Datos desde backend:', resp);
         this.consultas = resp;
       },
-      error: (err: any) => {
+
+      error: (err) => {
         console.error('❌ Error al conectar:', err);
       }
+
     });
   }
 
-  get f() { return this.citaForm.controls; }
+  get f() {
+    return this.citaForm.controls;
+  }
 
   // =========================
-  // 🟢 POST
+  // 🟢 CREAR CITA
   // =========================
   enviarCita(): void {
+
     if (this.citaForm.invalid) {
       this.citaForm.markAllAsTouched();
       return;
@@ -151,30 +175,119 @@ export class InicioComponent implements OnInit {
     };
 
     this.consultaService.crearConsulta(nuevaConsulta).subscribe({
-      next: (resp: any) => {
+
+      next: (resp) => {
+
         console.log('✅ Guardado en backend:', resp);
 
-        // 🔄 refrescar lista
         this.cargarConsultas();
+
+        this.citaEnviada = true;
+
+        setTimeout(() => {
+
+          this.citaEnviada = false;
+
+          this.citaForm.reset({
+            especie: 'Perro',
+            servicio: 'Consulta general'
+          });
+
+        }, 4000);
       },
-      error: (err: any) => {
+
+      error: (err) => {
         console.error('❌ Error al guardar:', err);
       }
+
+    });
+  }
+
+  // =========================
+  // 🟡 EDITAR CONSULTA
+  // =========================
+  editarConsulta(): void {
+
+    if (this.formConsulta.invalid) {
+      this.formConsulta.markAllAsTouched();
+      return;
+    }
+
+    const consulta = this.formConsulta.value;
+
+    this.consultaService.editarConsulta(consulta).subscribe({
+
+      next: () => {
+
+        console.log('✅ Consulta editada');
+
+        this.cargarConsultas();
+
+        this.formConsulta.reset({
+          Id_consulta: 0,
+          fecha_consulta: '',
+          motivo: '',
+          diagnostico: '',
+          tratamiento: ''
+        });
+
+      },
+
+      error: (err: unknown) => {
+        console.error('❌ Error al editar', err);
+      }
+
+    });
+  }
+
+  // =========================
+  // 🟠 CARGAR DATOS A FORM
+  // =========================
+  iniciarEdicion(consulta: bodyAgregaConsulta): void {
+
+    this.formConsulta.patchValue({
+      Id_consulta: consulta.Id_consulta,
+      fecha_consulta: this.formatearFechaInput(consulta.fecha_consulta),
+      motivo: consulta.motivo,
+      diagnostico: consulta.diagnostico,
+      tratamiento: consulta.tratamiento
     });
 
-    this.citaEnviada = true;
+    document.getElementById('consultas')?.scrollIntoView({
+      behavior: 'smooth'
+    });
+  }
 
-    setTimeout(() => {
-      this.citaEnviada = false;
-      this.citaForm.reset({ especie: 'Perro', servicio: 'Consulta general' });
-    }, 4000);
+  // =========================
+  // 🔴 DELETE
+  // =========================
+  eliminarConsulta(id: number): void {
+
+    if (!confirm('¿Eliminar esta consulta?')) return;
+
+    this.consultaService.eliminarConsulta(id).subscribe({
+
+      next: () => {
+        console.log('✅ Eliminada:', id);
+        this.cargarConsultas();
+      },
+
+      error: (err: unknown) => {
+        console.error('❌ Error al eliminar:', err);
+      }
+
+    });
   }
 
   // =========================
   // UI
   // =========================
   scrollA(seccion: string): void {
-    document.getElementById(seccion)?.scrollIntoView({ behavior: 'smooth' });
+
+    document.getElementById(seccion)?.scrollIntoView({
+      behavior: 'smooth'
+    });
+
     this.menuAbierto = false;
   }
 
@@ -184,6 +297,23 @@ export class InicioComponent implements OnInit {
 
   hoy(): string {
     return new Date().toISOString().split('T')[0];
+  }
+
+  formatearFecha(fecha: Date | string): string {
+
+    return new Date(fecha).toLocaleDateString('es-CL', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+
+  }
+
+  private formatearFechaInput(fecha: Date | string): string {
+
+    const fechaNormalizada = new Date(fecha);
+
+    return fechaNormalizada.toISOString().slice(0, 10);
   }
 
   irALogin(): void {

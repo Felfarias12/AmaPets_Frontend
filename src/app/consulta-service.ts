@@ -1,6 +1,1 @@
-import { Injectable } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root',
-})
-export class ConsultaService {}
+export * from './service/consulta-service';
