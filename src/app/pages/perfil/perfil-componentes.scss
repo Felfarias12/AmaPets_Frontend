@@ -210,7 +210,7 @@ body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
 }
 
 .main-sub {
-  font-size: 13px;
+  font-size: 20px;
   color: $muted;
 }
 
@@ -237,6 +237,7 @@ body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 18px;
+  
 }
 
 .mascota-card {
@@ -245,6 +246,7 @@ body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
   border-radius: 16px;
   padding: 22px 20px;
   transition: transform 0.2s, box-shadow 0.2s;
+  
 
   &:hover {
     transform: translateY(-4px);
