@@ -64,7 +64,7 @@
           }
         </p>
       </div>
-      <button class="btn-accion" (click)="nuevaCita()">+ Agendar cita</button>
+      
     </div>
 
     <!-- ===== SECCIÓN MASCOTAS ===== -->
@@ -103,7 +103,7 @@
         </div>
       </div>
     }
-
+    
     <!-- ===== SECCIÓN CITAS ===== -->
     @if (seccionActiva === 'citas') {
       <div class="citas-lista">
@@ -130,7 +130,11 @@
           </div>
         }
       </div>
+      <br>
+      <button class="btn-accion" (click)="nuevaCita()">+ Agendar cita</button>
     }
+
+    <!-- ===== SECCIÓN Ficha Clinica ===== -->
 
   </main>
 </div>
