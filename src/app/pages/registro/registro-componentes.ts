@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { bodyAgregaRegistro, RegistroService } from '../../service/registro-service';
 
 @Component({
   selector: 'app-registro',
@@ -16,8 +17,11 @@ export class RegistroComponent implements OnInit {
   cargando = false;
   errorMsg = '';
   mostrarPassword = false;
+  usuarioCreado = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+
+  registros: bodyAgregaRegistro[] = [];
+  constructor(private fb: FormBuilder, private router: Router, private registroService: RegistroService) {}
 
   ngOnInit(): void {
     this.registroForm = this.fb.group({
@@ -26,8 +30,6 @@ export class RegistroComponent implements OnInit {
       contrasena: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
-
-  get f() { return this.registroForm.controls; }
 
   togglePassword(): void {
     this.mostrarPassword = !this.mostrarPassword;
@@ -42,6 +44,126 @@ export class RegistroComponent implements OnInit {
     this.cargando = true;
     this.errorMsg = '';
 
+    // 🔵 FORMULARIO EDICION
+    this.registroForm = this.fb.group({
+      Id_usuario:     [0],
+      nombre:         ['', [Validators.required, Validators.minLength(2)]],
+      email:          ['', [Validators.required, Validators.email]],
+      contrasena:     ['', [Validators.required, Validators.minLength(6)]],
+      fecha_registro: ['', Validators.required]
+    });
+ 
+    // 🔥 CARGAR USUARIOS
+    this.cargarUsuarios();
+  }
+ 
+  // =========================
+  // 🔵 GET USUARIOS
+  // =========================
+  cargarUsuarios(): void {
+    this.registroService.obtenerRegistros().subscribe({
+      next: (resp: bodyAgregaRegistro[]) => {
+        console.log('✅ Usuarios desde backend:', resp);
+        this.registros = resp;
+      },
+      error: (err) => {
+        console.error('❌ Error al conectar:', err);
+      }
+    });
+  }
+ 
+  get f() {
+    return this.registroForm.controls;
+  }
+ 
+  // =========================
+  // 🟢 CREAR USUARIO
+  // =========================
+  enviarRegistro(): void {
+    if (this.registroForm.invalid) {
+      this.registroForm.markAllAsTouched();
+      return;
+    }
+ 
+    const nuevoUsuario = {
+      Id_usuario:     0,
+      nombre:         this.registroForm.value.nombre,
+      email:          this.registroForm.value.email,
+      contrasena:     this.registroForm.value.contrasena,
+      edad:           this.registroForm.value.edad , // Puedes agregar un campo de edad en el formulario si lo deseas
+      fecha_registro: new Date()
+    };
+ 
+    this.registroService.crearRegistro(nuevoUsuario).subscribe({
+      next: (resp) => {
+        console.log('✅ Guardado en backend:', resp);
+        this.cargarUsuarios();
+        this.usuarioCreado = true;
+        setTimeout(() => {
+          this.usuarioCreado = false;
+          this.registroForm.reset();
+        }, 4000);
+      },
+      error: (err) => {
+        console.error('❌ Error al guardar:', err);
+      }
+    });
+  }
+ 
+  // =========================
+  // 🟡 EDITAR USUARIO
+  // =========================
+  editarUsuario(): void {
+    if (this.registroForm.invalid) {
+      this.registroForm.markAllAsTouched();
+      return;
+    }
+ 
+    const usuario = this.registroForm.value;
+ 
+    this.registroService.editarRegistro(usuario).subscribe({
+      next: () => {
+        console.log('✅ Usuario editado');
+        this.cargarUsuarios();
+        this.registroForm.reset({
+          Id_usuario: 0, nombre: '', email: '', contrasena: '', fecha_registro: ''
+        });
+      },
+      error: (err: unknown) => {
+        console.error('❌ Error al editar', err);
+      }
+    });
+  }
+ 
+  // =========================
+  // 🟠 CARGAR DATOS A FORM
+  // =========================
+  iniciarEdicion(usuario: bodyAgregaRegistro): void {
+    this.registroForm.patchValue({
+      Id_usuario:     usuario.Id_usuario,
+      nombre:         usuario.nombre,
+      email:          usuario.email,
+      contrasena:     usuario.contrasena,
+      fecha_registro: ''
+    });
+    document.getElementById('usuarios')?.scrollIntoView({ behavior: 'smooth' });
+  }
+ 
+  // =========================
+  // 🔴 DELETE
+  // =========================
+  eliminarUsuario(id: number): void {
+    if (!confirm('¿Eliminar este usuario?')) return;
+    this.registroService.eliminarRegistro(id).subscribe({
+      next: () => {
+        console.log('✅ Eliminado:', id);
+        this.cargarUsuarios();
+      },
+      error: (err: unknown) => {
+        console.error('❌ Error al eliminar:', err);
+      }
+    });
+  
     // Simulación de registro — reemplazar con llamada al servicio real
     setTimeout(() => {
       this.cargando = false;
