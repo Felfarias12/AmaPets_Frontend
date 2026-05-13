@@ -73,6 +73,7 @@ body {
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
   border-bottom: 0.5px solid $border;
+  
 }
 
 .nav-inner {
@@ -109,7 +110,7 @@ body {
   @include flex(center, center, 28px);
 
   a {
-    font-size: 14px;
+    font-size: 20px;
     font-weight: 600;
     color: $muted;
     text-decoration: none;
@@ -197,7 +198,7 @@ body {
 
 .hero-title {
   font-family: $font-serif;
-  font-size: 42px;
+  font-size: 50px;
   line-height: 1.1;
   color: $teal-dark;
   font-style: italic;
@@ -209,10 +210,9 @@ body {
 }
 
 .hero-desc {
-  font-size: 15px;
+  font-size: 20px;
   color: $muted;
   line-height: 1.7;
-  max-width: 380px;
 }
 
 .hero-actions {
@@ -356,6 +356,7 @@ body {
   @include card;
   padding: 24px 20px;
   cursor: pointer;
+  box-shadow: 0 10px 10px rgb(150, 149, 149);
   transition: transform 0.2s, border-color 0.2s;
 
   &:hover {
@@ -380,7 +381,7 @@ body {
 }
 
 .servicio-desc {
-  font-size: 13px;
+  font-size: 16px;
   color: $muted;
   line-height: 1.6;
 }
@@ -411,9 +412,11 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
+  
 }
 
-.vet-card { @include card; }
+.vet-card { @include card;
+  box-shadow: 0 10px 10px rgb(150, 149, 149); }
 
 .vet-header {
   @include flex(center, flex-start, 14px);
@@ -489,7 +492,7 @@ body {
 }
 
 .citas-desc {
-  font-size: 14px;
+  font-size: 16px;
   opacity: 0.9;
   line-height: 1.75;
   margin-bottom: 24px;
@@ -503,7 +506,7 @@ body {
 
   li {
     @include flex(center, flex-start, 10px);
-    font-size: 14px;
+    font-size: 16px;
     opacity: 0.95;
   }
 }
@@ -630,7 +633,7 @@ body {
   @include flex(center, center, 20px);
 
   a {
-    font-size: 13px;
+    font-size: 20px;
     color: rgba(255,255,255,0.65);
     text-decoration: none;
     cursor: pointer;

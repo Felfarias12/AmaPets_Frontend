@@ -40,6 +40,8 @@ export class RegistroComponent implements OnInit {
       correo:     ['', [Validators.required, Validators.email]],
       contrasena: ['', [Validators.required, Validators.minLength(6)]]
     });
+
+    this.cargarUsuarios();
   }
 
   togglePassword(): void {

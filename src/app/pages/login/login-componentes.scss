@@ -43,7 +43,16 @@ body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
   justify-content: space-between;
   position: relative;
   overflow: hidden;
+
+
 }
+
+.center-logo {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 40px;
+}
+
 
 .aside-logo {
   display: flex;
@@ -68,6 +77,13 @@ body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
     color: white;
   }
 }
+
+.center-aside{
+  display: flex;
+  justify-content: center;
+  height: 65%;
+}
+
 
 .aside-content {
   z-index: 1;
@@ -149,6 +165,7 @@ body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
   padding: 44px 40px;
   width: 100%;
   max-width: 420px;
+  box-shadow: 0 10px 10px rgb(150, 149, 149);
 }
 
 .login-header {

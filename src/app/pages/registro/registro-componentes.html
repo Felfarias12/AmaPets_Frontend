@@ -2,8 +2,8 @@
   <div class="registro-main">
     <div class="registro-card">
       <div class="registro-header">
-        <h1 class="registro-title">Registro</h1>
-        <p class="registro-subtitle">Completa el formulario para registrarte</p>
+        <h1 class="registro-title">Usuarios</h1>
+        <p class="registro-subtitle">Alta, edición y baja en una sola pantalla</p>
       </div>
 
       @if (!usuarioCreado) {
@@ -35,7 +35,6 @@
           </div>
         </div>
 
-        <!-- Email -->
         <div class="form-group">
           <label for="correo">Correo electrónico</label>
           <div class="input-wrap">
@@ -55,9 +54,9 @@
           }
         </div>
 
-        <!-- Contraseña -->
+        <!-- Email -->
         <div class="form-group">
-          <label for="contrasena">Contraseña</label>
+          <label for="email">Correo electrónico</label>
           <div class="input-wrap">
             <span class="input-icon">🔒</span>
             <input
@@ -70,16 +69,16 @@
               {{ mostrarPassword ? '👁️‍🗨️' : '👁️' }}
             </button>
           </div>
-          @if (f['contrasena'].invalid && f['contrasena'].touched) {
+          @if (f['email'].invalid && f['email'].touched) {
             <span class="form-error">
-              @if (f['contrasena'].errors?.['required']) { La contraseña es obligatoria }
-              @if (f['contrasena'].errors?.['minlength']) { Mínimo 6 caracteres }
+              @if (f['email'].errors?.['required']) { El email es obligatorio }
+              @if (f['email'].errors?.['email']) { Ingresa un email válido }
             </span>
           }
         </div>
 
         @if (errorMsg) {
-          <div class="login-error">{{ errorMsg }}</div>
+          <div class="registro-error">{{ errorMsg }}</div>
         }
 
         <button type="submit" class="btn-registro" >
@@ -93,6 +92,29 @@
           <p class="exito-desc">Ya puedes iniciar sesión con tu cuenta.</p>
         </div>
       }
+
+      <div class="usuarios-lista">
+        <h2 class="usuarios-title">Usuarios registrados</h2>
+        @if (usuarios.length === 0) {
+          <p class="usuarios-vacio">Todavía no hay usuarios guardados.</p>
+        } @else {
+          <div class="usuarios-grid">
+            @for (usuario of usuarios; track usuario.id) {
+              <article class="usuario-card">
+                <div class="usuario-info">
+                  <strong>{{ usuario.nombre }}</strong>
+                  <span>{{ usuario.email }}</span>
+                  <span>{{ usuario.telefono }}</span>
+                </div>
+                <div class="usuario-actions">
+                  <button type="button" class="action-btn" (click)="editarUsuario(usuario)">Editar</button>
+                  <button type="button" class="action-btn danger" (click)="eliminarUsuario(usuario.id)">Eliminar</button>
+                </div>
+              </article>
+            }
+          </div>
+        }
+      </div>
 
       <div class="registro-footer">
         <span>¿Ya tienes cuenta?</span>
