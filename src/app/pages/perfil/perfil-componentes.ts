@@ -1,17 +1,21 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Usuario } from '../../models/usuario.model';
+import { CommonModule, DatePipe, UpperCasePipe } from '@angular/common';
 import { Mascota, CitaHistorial } from '../../models/mascota.model';
+import { FichaClinica, Vacuna } from '../../models/fichaClinica.model';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
+  imports: [CommonModule, DatePipe, UpperCasePipe],
   templateUrl: './perfil-componentes.html',
   styleUrls: ['./perfil-componentes.scss']
 })
 export class PerfilComponent {
 
-  seccionActiva: 'mascotas' | 'citas' = 'mascotas';
+  seccionActiva: 'mascotas' | 'citas' | 'ficha-clinica' = 'mascotas';
+  subSeccionFicha: 'historial' | 'vacunas' | 'medicamentos' = 'historial';
 
   usuario: Usuario = {
     id: 1,
@@ -94,11 +98,49 @@ export class PerfilComponent {
     }
   ];
 
+  fichas: FichaClinica[] = [
+    {
+      id: 1, mascotaId: 1, fecha: '2025-04-10', motivo: 'Control anual',
+      veterinario: 'Dr. Andrés Pérez', diagnostico: 'Paciente en buen estado general',
+      tratamiento: 'Desparasitación interna y externa', peso: 28.5, temperatura: '38.4°C',
+      notas: 'Se recomienda dieta balanceada y ejercicio diario'
+    }
+  ];
+
+  vacunas: Vacuna[] = [
+    { nombre: 'Polivalente', fechaAplicacion: '2025-03-15', proximaDosis: '2026-03-15', lote: 'VAX-2025-031', estado: 'vigente' },
+    { nombre: 'Bordetella', fechaAplicacion: '2024-09-10', proximaDosis: '2025-09-10', lote: 'BOR-2024-092', estado: 'vencida' }
+  ];
+
+  medicamentos = [
+  {
+    nombre: 'Nexgard (Antipulgas)',
+    fechaInicio: '2026-01-01',
+    dosis: '1 comprimido',
+    frecuencia: 'Mensual',
+    duracion: 'Permanente',
+    estado: 'activo'
+  },
+  {
+    nombre: 'Metronidazol 250mg',
+    fechaInicio: '2025-12-05',
+    dosis: '1 comprimido',
+    frecuencia: 'Cada 12 horas',
+    duracion: '5 días',
+    estado: 'finalizado'
+  }
+];
+
   constructor(private router: Router) {}
 
-  cambiarSeccion(seccion: 'mascotas' | 'citas'): void {
+  cambiarSeccion(seccion: 'mascotas' | 'citas' | 'ficha-clinica'): void {
     this.seccionActiva = seccion;
   }
+
+  cambiarSubSeccion(sub: 'historial' | 'vacunas' | 'medicamentos') {
+    this.subSeccionFicha = sub;
+  }
+
 
   nuevaCita(): void {
     this.router.navigate(['/'], { fragment: 'citas' });
