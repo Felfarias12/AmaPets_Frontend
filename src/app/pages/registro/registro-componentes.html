@@ -1,38 +1,56 @@
 <div class="registro-page">
-    <!-- Panel derecho con formulario -->
   <div class="registro-main">
     <div class="registro-card">
       <div class="registro-header">
         <h1 class="registro-title">Registro</h1>
         <p class="registro-subtitle">Completa el formulario para registrarte</p>
       </div>
-  <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
-    <!-- Nombre -->
-    <div class="form-group">
-      <label for="nombre">Nombre completo</label>
-      <div class="input-wrap">
-        <span class="input-icon"></span>
-        <input type="text" id="nombre" formControlName="nombre" class="form-control">
-      </div>
-    </div>
+
+      @if (!usuarioCreado) {
+      <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" novalidate>
+        
+        <!-- Nombre -->
+        <div class="form-group">
+          <label for="nombre">Nombre completo</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" id="nombre" formControlName="nombre" class="form-control">
+          </div>
+          @if (f['nombre'].invalid && f['nombre'].touched) {
+            <span class="form-error">El nombre es obligatorio</span>
+          }
+        </div>
+
+        <!-- Edad (NUEVO CAMPO) -->
+        <div class="form-group">
+          <label for="edad">Edad</label>
+          <div class="input-wrap">
+            <span class="input-icon">🎂</span>
+            <input 
+              type="number" 
+              id="edad" 
+              formControlName="edad" 
+              class="form-control" 
+              placeholder="Ej: 25">
+          </div>
+        </div>
 
         <!-- Email -->
         <div class="form-group">
-          <label for="email">Correo electrónico</label>
+          <label for="correo">Correo electrónico</label>
           <div class="input-wrap">
             <span class="input-icon">✉️</span>
             <input
-              id="email"
+              id="correo"
               type="email"
-              formControlName="email"
+              formControlName="correo"
               placeholder="tu@email.com"
-              title="Correo electrónico"
               autocomplete="email">
           </div>
-          @if (f['email'].invalid && f['email'].touched) {
+          @if (f['correo'].invalid && f['correo'].touched) {
             <span class="form-error">
-              @if (f['email'].errors?.['required']) { El email es obligatorio }
-              @if (f['email'].errors?.['email']) { Ingresa un email válido }
+              @if (f['correo'].errors?.['required']) { El correo es obligatorio }
+              @if (f['correo'].errors?.['email']) { Ingresa un correo válido }
             </span>
           }
         </div>
@@ -47,10 +65,9 @@
               [type]="mostrarPassword ? 'text' : 'password'"
               formControlName="contrasena"
               placeholder="Mínimo 6 caracteres"
-              title="Contraseña"
               autocomplete="current-password">
             <button type="button" class="toggle-pass" (click)="togglePassword()">
-              {{ mostrarPassword ? '🙈' : '👁️' }}
+              {{ mostrarPassword ? '👁️‍🗨️' : '👁️' }}
             </button>
           </div>
           @if (f['contrasena'].invalid && f['contrasena'].touched) {
@@ -65,24 +82,23 @@
           <div class="login-error">{{ errorMsg }}</div>
         }
 
-        <button type="submit" class="btn-registro" [class.loading]="cargando" [disabled]="cargando">
-          @if (cargando) {
-            <span class="spinner"></span> Ingresando...
-          } @else {
-            Ingresar
-          }
+        <button type="submit" class="btn-registro" >
+          {{ cargando ? 'Registrando...' : 'Registrarse' }}
         </button>
-
       </form>
+      } @else {
+        <div class="exito-container">
+          <span class="exito-icon">✅</span> 
+          <p class="exito-titulo">¡Registro exitoso!</p>
+          <p class="exito-desc">Ya puedes iniciar sesión con tu cuenta.</p>
+        </div>
+      }
 
       <div class="registro-footer">
-        <span>¿ya tienes cuenta?</span>
+        <span>¿Ya tienes cuenta?</span>
         <a class="register-link" (click)="irALogin()">Inicia sesión</a>
       </div>
 
     </div>
   </div>
-
 </div>
-
-

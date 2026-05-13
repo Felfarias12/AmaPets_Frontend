@@ -23,32 +23,40 @@ export class RegistroComponent implements OnInit {
   registros: bodyAgregaRegistro[] = [];
   constructor(private fb: FormBuilder, private router: Router, private registroService: RegistroService) {}
 
-  ngOnInit(): void {
-    this.registroForm = this.fb.group({
-      nombre:     ['', [Validators.required, Validators.minLength(3)]],
-      email:      ['', [Validators.required, Validators.email]],
-      contrasena: ['', [Validators.required, Validators.minLength(6)]]
-    });
-  }
+ngOnInit(): void {
+  this.registroForm = this.fb.group({
+    nombre:     ['', [Validators.required, Validators.minLength(3)]],
+    edad:       ['', [Validators.required, Validators.min(1), Validators.max(120)]], // Añadir esto
+    correo:      ['', [Validators.required, Validators.email]],
+    contrasena: ['', [Validators.required, Validators.minLength(6)]]
+  });
+}
 
   togglePassword(): void {
     this.mostrarPassword = !this.mostrarPassword;
   }
 
-  onSubmit(): void {
-    if (this.registroForm.invalid) {
-      this.registroForm.markAllAsTouched();
-      return;
-    }
+onSubmit(): void {
+  // 1. Validamos el formulario actual (el que tiene los datos del usuario)
+  if (this.registroForm.invalid) {
+    this.registroForm.markAllAsTouched();
+    return;
+  }
 
-    this.cargando = true;
-    this.errorMsg = '';
+  this.cargando = true;
+  this.errorMsg = '';
+
+  // 2. Llamamos directamente al método que envía los datos al backend
+  this.enviarRegistro();
+
+
+
 
     // 🔵 FORMULARIO EDICION
     this.registroForm = this.fb.group({
       Id_usuario:     [0],
       nombre:         ['', [Validators.required, Validators.minLength(2)]],
-      email:          ['', [Validators.required, Validators.email]],
+      correo:          ['', [Validators.required, Validators.email]],
       contrasena:     ['', [Validators.required, Validators.minLength(6)]],
       fecha_registro: ['', Validators.required]
     });
@@ -79,61 +87,31 @@ export class RegistroComponent implements OnInit {
   // =========================
   // 🟢 CREAR USUARIO
   // =========================
-  enviarRegistro(): void {
-    if (this.registroForm.invalid) {
-      this.registroForm.markAllAsTouched();
-      return;
+ enviarRegistro(): void {
+  // Creamos el objeto asegurándonos de que los nombres coincidan con Java
+  const nuevoUsuario = {
+    Id_usuario: this.registroForm.value.Id_usuario, // El backend debería asignar esto automáticamente
+    nombre: this.registroForm.value.nombre,
+    correo: this.registroForm.value.email,
+    contrasena: this.registroForm.value.contrasena,
+    edad: this.registroForm.value.edad
+  };
+
+  this.registroService.crearRegistro(nuevoUsuario).subscribe({
+    next: (resp) => {
+      console.log('✅ Usuario registrado:', resp);
+      this.usuarioCreado = true;
+      this.cargando = false;
+      this.registroForm.reset(); // Ahora sí reseteamos, una vez que el servidor respondió OK
+    },
+    error: (err) => {
+      this.cargando = false;
+      this.errorMsg = 'Error al guardar el usuario en el servidor.';
+      console.error('❌ Error 500 o CORS:', err);
     }
- 
-    const nuevoUsuario = {
-      Id_usuario:     0,
-      nombre:         this.registroForm.value.nombre,
-      email:          this.registroForm.value.email,
-      contrasena:     this.registroForm.value.contrasena,
-      edad:           this.registroForm.value.edad , // Puedes agregar un campo de edad en el formulario si lo deseas
-      fecha_registro: new Date()
-    };
- 
-    this.registroService.crearRegistro(nuevoUsuario).subscribe({
-      next: (resp) => {
-        console.log('✅ Guardado en backend:', resp);
-        this.cargarUsuarios();
-        this.usuarioCreado = true;
-        setTimeout(() => {
-          this.usuarioCreado = false;
-          this.registroForm.reset();
-        }, 4000);
-      },
-      error: (err) => {
-        console.error('❌ Error al guardar:', err);
-      }
-    });
-  }
- 
-  // =========================
-  // 🟡 EDITAR USUARIO
-  // =========================
-  editarUsuario(): void {
-    if (this.registroForm.invalid) {
-      this.registroForm.markAllAsTouched();
-      return;
-    }
- 
-    const usuario = this.registroForm.value;
- 
-    this.registroService.editarRegistro(usuario).subscribe({
-      next: () => {
-        console.log('✅ Usuario editado');
-        this.cargarUsuarios();
-        this.registroForm.reset({
-          Id_usuario: 0, nombre: '', email: '', contrasena: '', fecha_registro: ''
-        });
-      },
-      error: (err: unknown) => {
-        console.error('❌ Error al editar', err);
-      }
-    });
-  }
+  });
+
+}
  
   // =========================
   // 🟠 CARGAR DATOS A FORM
@@ -142,7 +120,7 @@ export class RegistroComponent implements OnInit {
     this.registroForm.patchValue({
       Id_usuario:     usuario.Id_usuario,
       nombre:         usuario.nombre,
-      email:          usuario.email,
+      correo:          usuario.correo,
       contrasena:     usuario.contrasena,
       fecha_registro: ''
     });

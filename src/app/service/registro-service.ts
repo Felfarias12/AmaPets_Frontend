@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 
 
@@ -9,23 +10,22 @@ import { Observable } from 'rxjs';
 })
 export class RegistroService {
  private http = inject(HttpClient);
- private baseUrl = 'http://localhost:7575/usuarios';
 
 
 obtenerRegistros(): Observable<bodyAgregaRegistro[]> {
- return this.http.get<bodyAgregaRegistro[]>(this.baseUrl);
+ return this.http.get<bodyAgregaRegistro[]>(environment.apiUrlRegistros);
 }
 
 crearRegistro(registro: bodyAgregaRegistro): Observable<bodyAgregaRegistro> {
- return this.http.post<bodyAgregaRegistro>(this.baseUrl, registro);
+ return this.http.post<bodyAgregaRegistro>(environment.apiUrlRegistros, registro);
 }
 
 editarRegistro(registro: bodyAgregaRegistro): Observable<bodyAgregaRegistro> {
- return this.http.put<bodyAgregaRegistro>(`${this.baseUrl}/${registro.Id_usuario}`, registro);
+ return this.http.put<bodyAgregaRegistro>(`${environment.apiUrlRegistros}/${registro.Id_usuario}`, registro);
 }
 
 eliminarRegistro(id: number): Observable<void> {
- return this.http.delete<void>(`${this.baseUrl}/${id}`);
+ return this.http.delete<void>(`${environment.apiUrlRegistros}/${id}`);
 }
 }
 
@@ -33,8 +33,7 @@ eliminarRegistro(id: number): Observable<void> {
 export interface bodyAgregaRegistro {
  Id_usuario: number;
  nombre: string;
- email: string;
+ correo: string;
  contrasena: string;
  edad: number;
- fecha_registro: Date;
 }
