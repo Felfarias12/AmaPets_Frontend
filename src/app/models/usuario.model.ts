@@ -3,7 +3,8 @@ export interface Usuario {
   nombre: string;
   email: string;
   telefono: string;
-  fotoPerfil?: string;
+  contrasena: string;
+  edad: number;
 }
 
 export interface LoginForm {

@@ -435,6 +435,250 @@ body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
 }
 
 // =============================================
+// ficha clinica
+// =============================================
+
+.ficha-clinica-container {
+  .cita-item {
+    border-left: 4px solid #4db6ac; 
+    background: #fdfdfd;
+  }
+  
+  .no-data {
+    text-align: center;
+    padding: 40px;
+    color: #888;
+    background: #f5f5f5;
+    border-radius: 12px;
+  }
+}
+.mascota-header-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 5px solid #3e7d60;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+
+  .header-main {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+    .avatar-grande {
+      font-size: 3rem;
+      background: #f0f7f4;
+      padding: 15px;
+      border-radius: 50%;
+    }
+  }
+}
+
+.header-stats {
+  display: flex;
+  gap: 15px;
+
+  .stat-pill {
+    background: #f8faf9;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #eef2f1;
+
+    strong { display: block; color: #2d5a27; font-size: 1.1rem; }
+    span { font-size: 0.7rem; color: #777; letter-spacing: 1px; }
+  }
+}
+.tabs-internas {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+
+  button {
+    background: none;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    color: #666;
+    font-weight: 500;
+    transition: all 0.3s;
+
+    &.active {
+      color: #3e7d60;
+      border-bottom: 3px solid #3e7d60;
+    }
+
+    &:hover {
+      background: #f0f7f4;
+      border-radius: 4px;
+    }
+  }
+}
+
+.card-historial {
+  background: white;
+  border: 1px solid #e0f2f1;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: hidden;
+
+  .card-historial-top {
+    display: flex;
+    padding: 15px;
+    background: #f9fdfc;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .fecha-box {
+    background: #3e7d60;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 65px;
+
+    .dia { font-size: 1.5rem; font-weight: bold; display: block; }
+    .mes { font-size: 0.8rem; text-transform: uppercase; }
+  }
+
+  .card-historial-detalles {
+    padding: 15px 20px;
+    background: white;
+
+    p {
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      strong { color: #4db6ac; font-size: 0.8rem; margin-right: 10px; }
+    }
+  }
+}
+
+.vacunas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.vacuna-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0f2f1;
+  padding: 20px;
+  position: relative;
+  transition: transform 0.2s;
+
+  &:hover { transform: translateY(-5px); }
+
+  border-left: 5px solid #4db6ac; 
+  &.vencida { border-left-color: #ff8a80; }
+
+  .vacuna-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    
+    strong { color: #2d5a27; font-size: 1.1rem; }
+  }
+
+  .status-tag {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    background: #e0f2f1;
+    color: #00897b;
+
+    &.vencida-text { 
+       background: #ffebee;
+       color: #e53935;
+    }
+  }
+
+  .vacuna-info {
+    p {
+      margin: 5px 0;
+      font-size: 0.85rem;
+      color: #666;
+      display: flex;
+      justify-content: space-between;
+      
+      strong { color: #333; font-size: 0.85rem; }
+    }
+  }
+}
+
+.medicamento-item {
+  background: white;
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #eee;
+
+  .med-principal {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    .med-icon { font-size: 1.5rem; }
+    .med-nombre { font-weight: bold; color: #2d5a27; }
+  }
+
+  .med-stats {
+    display: flex;
+    gap: 30px;
+    font-size: 0.9rem;
+    color: #777;
+    span strong { color: #333; display: block; }
+  }
+}
+
+.medicamento-item {
+  background: white;
+  border: 1px solid #eef2f1;
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .med-nombre { font-weight: bold; color: #2d5a27; margin: 0; }
+  .med-desde { font-size: 0.8rem; color: #888; margin: 0; }
+
+  .med-stats {
+    display: flex;
+    gap: 20px;
+    .m-pill { 
+      font-size: 0.85rem; 
+      strong { color: #4db6ac; display: block; font-size: 0.7rem; text-transform: uppercase; }
+    }
+  }
+
+  .tag-estado {
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: #f5f5f5;
+    &.activo { background: #e0f2f1; color: #00897b; }
+  }
+}
+
+
+
+
+
+// =============================================
 // RESPONSIVE
 // =============================================
 @media (max-width: 768px) {

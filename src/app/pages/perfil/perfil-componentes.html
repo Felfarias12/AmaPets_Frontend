@@ -33,6 +33,13 @@
           <span class="nav-badge">{{ citasPendientes() }}</span>
         }
       </button>
+      <button
+        class="nav-item"
+        [class.active]="seccionActiva === 'ficha-clinica'"
+        (click)="cambiarSeccion('ficha-clinica')">
+        <span class="nav-item-icon">🩺</span>
+        Ficha Clínica
+      </button>
     </nav>
 
     <div class="sidebar-footer">
@@ -54,6 +61,7 @@
         <h1 class="main-title">
           @if (seccionActiva === 'mascotas') { Mis mascotas }
           @if (seccionActiva === 'citas') { Mis citas }
+          @if (seccionActiva === 'ficha-clinica') { Historial Clínico }
         </h1>
         <p class="main-sub">
           @if (seccionActiva === 'mascotas') {
@@ -61,6 +69,9 @@
           }
           @if (seccionActiva === 'citas') {
             {{ citasPendientes() }} cita{{ citasPendientes() !== 1 ? 's' : '' }} próxima{{ citasPendientes() !== 1 ? 's' : '' }}
+          }
+          @if (seccionActiva === 'ficha-clinica') {
+            Consulta el historial médico detallado de tus mascotas
           }
         </p>
       </div>
@@ -122,7 +133,7 @@
             </div>
 
             <span class="cita-estado" [class]="'estado-' + c.estado">
-              @if (c.estado === 'confirmada') { Confirmada }
+              @if ( c.estado === 'confirmada') { Confirmada }
               @if (c.estado === 'pendiente')  { Pendiente }
               @if (c.estado === 'completada') { Completada }
               @if (c.estado === 'cancelada')  { Cancelada }
@@ -133,6 +144,8 @@
       <br>
       <button class="btn-accion" (click)="nuevaCita()">+ Agendar cita</button>
     }
+  </div>  
+}
 
     <!-- ===== SECCIÓN Ficha Clinica ===== -->
 

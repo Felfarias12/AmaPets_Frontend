@@ -1,1 +1,6 @@
-export const environment = {};
+export const environment = {
+    production: true,
+    apiUrlConsultas: 'http://localhost:7583/consultas',
+    apiUrlRegistros: 'http://localhost:7575/usuarios',
+
+};
