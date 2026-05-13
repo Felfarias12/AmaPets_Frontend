@@ -18,142 +18,119 @@ export class RegistroComponent implements OnInit {
   errorMsg = '';
   mostrarPassword = false;
   usuarioCreado = false;
-
-
   registros: bodyAgregaRegistro[] = [];
-  constructor(private fb: FormBuilder, private router: Router, private registroService: RegistroService) {}
 
-ngOnInit(): void {
-  this.registroForm = this.fb.group({
-    nombre:     ['', [Validators.required, Validators.minLength(3)]],
-    edad:       ['', [Validators.required, Validators.min(1), Validators.max(120)]], // Añadir esto
-    correo:      ['', [Validators.required, Validators.email]],
-    contrasena: ['', [Validators.required, Validators.minLength(6)]]
-  });
-}
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router, 
+    private registroService: RegistroService
+  ) {}
+
+  ngOnInit(): void {
+    // Inicializamos el formulario con todos los campos necesarios desde el principio
+    this.initForm();
+    this.cargarUsuarios();
+  }
+
+  initForm(): void {
+    this.registroForm = this.fb.group({
+      Id_usuario: [null], // null para nuevos registros
+      nombre:     ['', [Validators.required, Validators.minLength(3)]],
+      edad:       ['', [Validators.required, Validators.min(1), Validators.max(120)]],
+      correo:     ['', [Validators.required, Validators.email]],
+      contrasena: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
 
   togglePassword(): void {
     this.mostrarPassword = !this.mostrarPassword;
   }
 
-onSubmit(): void {
-  // 1. Validamos el formulario actual (el que tiene los datos del usuario)
-  if (this.registroForm.invalid) {
-    this.registroForm.markAllAsTouched();
-    return;
-  }
-
-  this.cargando = true;
-  this.errorMsg = '';
-
-  // 2. Llamamos directamente al método que envía los datos al backend
-  this.enviarRegistro();
-
-
-
-
-    // 🔵 FORMULARIO EDICION
-    this.registroForm = this.fb.group({
-      Id_usuario:     [0],
-      nombre:         ['', [Validators.required, Validators.minLength(2)]],
-      correo:          ['', [Validators.required, Validators.email]],
-      contrasena:     ['', [Validators.required, Validators.minLength(6)]],
-      fecha_registro: ['', Validators.required]
-    });
- 
-    // 🔥 CARGAR USUARIOS
-    this.cargarUsuarios();
-  }
- 
-  // =========================
-  // 🔵 GET USUARIOS
-  // =========================
-  cargarUsuarios(): void {
-    this.registroService.obtenerRegistros().subscribe({
-      next: (resp: bodyAgregaRegistro[]) => {
-        console.log('✅ Usuarios desde backend:', resp);
-        this.registros = resp;
-      },
-      error: (err) => {
-        console.error('❌ Error al conectar:', err);
-      }
-    });
-  }
- 
+  // Getter para facilitar el acceso en el HTML
   get f() {
     return this.registroForm.controls;
   }
- 
-  // =========================
-  // 🟢 CREAR USUARIO
-  // =========================
- enviarRegistro(): void {
-  // Creamos el objeto asegurándonos de que los nombres coincidan con Java
-  const nuevoUsuario = {
-    Id_usuario: this.registroForm.value.Id_usuario, // El backend debería asignar esto automáticamente
-    nombre: this.registroForm.value.nombre,
-    correo: this.registroForm.value.email,
-    contrasena: this.registroForm.value.contrasena,
-    edad: this.registroForm.value.edad
-  };
 
-  this.registroService.crearRegistro(nuevoUsuario).subscribe({
-    next: (resp) => {
-      console.log('✅ Usuario registrado:', resp);
-      this.usuarioCreado = true;
-      this.cargando = false;
-      this.registroForm.reset(); // Ahora sí reseteamos, una vez que el servidor respondió OK
-    },
-    error: (err) => {
-      this.cargando = false;
-      this.errorMsg = 'Error al guardar el usuario en el servidor.';
-      console.error('❌ Error 500 o CORS:', err);
+  onSubmit(): void {
+    if (this.registroForm.invalid) {
+      this.registroForm.markAllAsTouched();
+      return;
     }
-  });
 
-}
- 
-  // =========================
-  // 🟠 CARGAR DATOS A FORM
-  // =========================
-  iniciarEdicion(usuario: bodyAgregaRegistro): void {
-    this.registroForm.patchValue({
-      Id_usuario:     usuario.Id_usuario,
-      nombre:         usuario.nombre,
-      correo:          usuario.correo,
-      contrasena:     usuario.contrasena,
-      fecha_registro: ''
-    });
-    document.getElementById('usuarios')?.scrollIntoView({ behavior: 'smooth' });
+    this.cargando = true;
+    this.errorMsg = '';
+
+    // Si tiene Id_usuario, podríamos estar editando, si no, es creación.
+    // Para este ejemplo, seguiremos tu lógica de enviarRegistro (Creación).
+    this.enviarRegistro();
   }
- 
-  // =========================
-  // 🔴 DELETE
-  // =========================
-  eliminarUsuario(id: number): void {
-    if (!confirm('¿Eliminar este usuario?')) return;
-    this.registroService.eliminarRegistro(id).subscribe({
-      next: () => {
-        console.log('✅ Eliminado:', id);
+
+  enviarRegistro(): void {
+    const datos = this.registroForm.value;
+    
+    // Mapeo exacto para el Backend
+    const nuevoUsuario: bodyAgregaRegistro = {
+      Id_usuario: datos.Id_usuario,
+      nombre:     datos.nombre,
+      correo:     datos.correo,
+      contrasena: datos.contrasena,
+      edad:       datos.edad
+    };
+
+    this.registroService.crearRegistro(nuevoUsuario).subscribe({
+      next: (resp) => {
+        console.log('✅ Operación exitosa:', resp);
+        this.usuarioCreado = true;
+        this.cargando = false;
+        
+        // Limpiamos el formulario y refrescamos la lista
+        this.registroForm.reset();
         this.cargarUsuarios();
+        
+        // Opcional: Redirigir tras éxito
+        // setTimeout(() => this.router.navigate(['/login']), 2000);
       },
-      error: (err: unknown) => {
-        console.error('❌ Error al eliminar:', err);
+      error: (err) => {
+        this.cargando = false;
+        this.errorMsg = 'Error en el servidor. Verifica que el correo no esté duplicado.';
+        console.error('❌ Error:', err);
       }
     });
-  
-    // Simulación de registro — reemplazar con llamada al servicio real
-    setTimeout(() => {
-      this.cargando = false;
-      // Simulamos registro exitoso con cualquier dato válido
-      this.router.navigate(['/perfil']);
-    }, 1500);
-    }
-  irAInicio(): void {
-    this.router.navigate(['/']);
   }
+
+  cargarUsuarios(): void {
+    this.registroService.obtenerRegistros().subscribe({
+      next: (resp) => {
+        this.registros = resp;
+      },
+      error: (err) => console.error('❌ Error al cargar:', err)
+    });
+  }
+
+  iniciarEdicion(usuario: bodyAgregaRegistro): void {
+    // Usamos patchValue para cargar los datos en el form existente sin destruirlo
+    this.registroForm.patchValue({
+      Id_usuario: usuario.Id_usuario,
+      nombre:     usuario.nombre,
+      correo:     usuario.correo,
+      contrasena: usuario.contrasena,
+      edad:       usuario.edad
+    });
     
-  irALogin(): void {
-    this.router.navigate(['/login']);
+    document.getElementById('usuarios')?.scrollIntoView({ behavior: 'smooth' });
   }
+
+  eliminarUsuario(id: number): void {
+    if (!confirm('¿Eliminar este usuario?')) return;
+    
+    this.registroService.eliminarRegistro(id).subscribe({
+      next: () => {
+        this.cargarUsuarios();
+      },
+      error: (err) => console.error('❌ Error al eliminar:', err)
+    });
+  }
+
+  irAInicio(): void { this.router.navigate(['/']); }
+  irALogin(): void { this.router.navigate(['/login']); }
 }

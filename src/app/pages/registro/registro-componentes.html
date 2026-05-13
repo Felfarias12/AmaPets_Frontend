@@ -50,7 +50,7 @@
           @if (f['correo'].invalid && f['correo'].touched) {
             <span class="form-error">
               @if (f['correo'].errors?.['required']) { El correo es obligatorio }
-              @if (f['correo'].errors?.['email']) { Ingresa un correo válido }
+              @if (f['correo'].errors?.['correo']) { Ingresa un correo válido }
             </span>
           }
         </div>
