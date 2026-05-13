@@ -1,0 +1,14 @@
+{
+  "/consultas": {
+    "target": "http://localhost:7583",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/usuarios": {
+    "target": "http://localhost:7575",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

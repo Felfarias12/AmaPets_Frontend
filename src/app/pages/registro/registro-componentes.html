@@ -1,33 +1,48 @@
 <div class="registro-page">
-    <!-- Panel derecho con formulario -->
   <div class="registro-main">
     <div class="registro-card">
       <div class="registro-header">
-        <h1 class="registro-title">Registro</h1>
-        <p class="registro-subtitle">Completa el formulario para registrarte</p>
+        <h1 class="registro-title">Usuarios</h1>
+        <p class="registro-subtitle">Alta, edición y baja en una sola pantalla</p>
       </div>
-  <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
-    <!-- Nombre -->
-    <div class="form-group">
-      <label for="nombre">Nombre completo</label>
-      <div class="input-wrap">
-        <span class="input-icon"></span>
-        <input type="text" id="nombre" formControlName="nombre" class="form-control">
-      </div>
-    </div>
+      <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+        <input type="hidden" formControlName="id">
+        <input type="hidden" formControlName="fotoPerfil">
+
+        <div class="form-group">
+          <label for="nombre">Nombre completo</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input id="nombre" type="text" formControlName="nombre" placeholder="Nombre y apellido">
+          </div>
+          @if (f['nombre'].invalid && f['nombre'].touched) {
+            <span class="form-error">
+              @if (f['nombre'].errors?.['required']) { El nombre es obligatorio }
+              @if (f['nombre'].errors?.['minlength']) { Mínimo 3 caracteres }
+            </span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="telefono">Teléfono</label>
+          <div class="input-wrap">
+            <span class="input-icon">📞</span>
+            <input id="telefono" type="text" formControlName="telefono" placeholder="+56 9 1234 5678" autocomplete="tel">
+          </div>
+          @if (f['telefono'].invalid && f['telefono'].touched) {
+            <span class="form-error">
+              @if (f['telefono'].errors?.['required']) { El teléfono es obligatorio }
+              @if (f['telefono'].errors?.['minlength']) { Ingresa un teléfono válido }
+            </span>
+          }
+        </div>
 
         <!-- Email -->
         <div class="form-group">
           <label for="email">Correo electrónico</label>
           <div class="input-wrap">
             <span class="input-icon">✉️</span>
-            <input
-              id="email"
-              type="email"
-              formControlName="email"
-              placeholder="tu@email.com"
-              title="Correo electrónico"
-              autocomplete="email">
+            <input id="email" type="email" formControlName="email" placeholder="tu@email.com" autocomplete="email">
           </div>
           @if (f['email'].invalid && f['email'].touched) {
             <span class="form-error">
@@ -37,43 +52,48 @@
           }
         </div>
 
-        <!-- Contraseña -->
-        <div class="form-group">
-          <label for="contrasena">Contraseña</label>
-          <div class="input-wrap">
-            <span class="input-icon">🔒</span>
-            <input
-              id="contrasena"
-              [type]="mostrarPassword ? 'text' : 'password'"
-              formControlName="contrasena"
-              placeholder="Mínimo 6 caracteres"
-              title="Contraseña"
-              autocomplete="current-password">
-            <button type="button" class="toggle-pass" (click)="togglePassword()">
-              {{ mostrarPassword ? '🙈' : '👁️' }}
-            </button>
-          </div>
-          @if (f['contrasena'].invalid && f['contrasena'].touched) {
-            <span class="form-error">
-              @if (f['contrasena'].errors?.['required']) { La contraseña es obligatoria }
-              @if (f['contrasena'].errors?.['minlength']) { Mínimo 6 caracteres }
-            </span>
-          }
-        </div>
-
         @if (errorMsg) {
-          <div class="login-error">{{ errorMsg }}</div>
+          <div class="registro-error">{{ errorMsg }}</div>
         }
 
         <button type="submit" class="btn-registro" [class.loading]="cargando" [disabled]="cargando">
           @if (cargando) {
-            <span class="spinner"></span> Ingresando...
+            <span class="spinner"></span> Guardando...
           } @else {
-            Ingresar
+            {{ usuarioEditando ? 'Actualizar usuario' : 'Crear usuario' }}
           }
         </button>
 
+        @if (usuarioEditando) {
+          <button type="button" class="btn-registro btn-secondary" (click)="limpiarFormulario()">
+            Limpiar formulario
+          </button>
+        }
+
       </form>
+
+      <div class="usuarios-lista">
+        <h2 class="usuarios-title">Usuarios registrados</h2>
+        @if (usuarios.length === 0) {
+          <p class="usuarios-vacio">Todavía no hay usuarios guardados.</p>
+        } @else {
+          <div class="usuarios-grid">
+            @for (usuario of usuarios; track usuario.id) {
+              <article class="usuario-card">
+                <div class="usuario-info">
+                  <strong>{{ usuario.nombre }}</strong>
+                  <span>{{ usuario.email }}</span>
+                  <span>{{ usuario.telefono }}</span>
+                </div>
+                <div class="usuario-actions">
+                  <button type="button" class="action-btn" (click)="editarUsuario(usuario)">Editar</button>
+                  <button type="button" class="action-btn danger" (click)="eliminarUsuario(usuario.id)">Eliminar</button>
+                </div>
+              </article>
+            }
+          </div>
+        }
+      </div>
 
       <div class="registro-footer">
         <span>¿ya tienes cuenta?</span>

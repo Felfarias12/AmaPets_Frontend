@@ -213,7 +213,7 @@ body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
             box-shadow: 0 0 0 3px rgba($teal, 0.2);
             background: $bg;
         }
-        &::placeholder{color: lighten($muted, 20%);
+        &::placeholder{color: color.adjust($muted, $lightness: 20%);
         }
     }
 }
