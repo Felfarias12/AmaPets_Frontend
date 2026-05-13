@@ -17,7 +17,9 @@ export class PerfilComponent {
     id: 1,
     nombre: 'Juan García',
     email: 'juan@email.com',
-    telefono: '+56 9 1234 5678'
+    telefono: '+56 9 1234 5678',
+    contrasena: '********',
+    edad: 30
   };
 
   mascotas: Mascota[] = [
