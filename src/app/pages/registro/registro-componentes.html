@@ -17,11 +17,11 @@
             <input type="text" id="nombre" formControlName="nombre" class="form-control">
           </div>
           @if (f['nombre'].invalid && f['nombre'].touched) {
-            <span class="form-error">El nombre es obligatorio</span>
+            <span class="form-error">El nombre es obligatorio (mín. 3 caracteres)</span>
           }
         </div>
 
-        <!-- Edad (NUEVO CAMPO) -->
+        <!-- Edad -->
         <div class="form-group">
           <label for="edad">Edad</label>
           <div class="input-wrap">
@@ -33,8 +33,12 @@
               class="form-control" 
               placeholder="Ej: 25">
           </div>
+          @if (f['edad'].invalid && f['edad'].touched) {
+            <span class="form-error">Ingresa una edad válida (1-120)</span>
+          }
         </div>
 
+        <!-- Correo Electrónico -->
         <div class="form-group">
           <label for="correo">Correo electrónico</label>
           <div class="input-wrap">
@@ -43,37 +47,36 @@
               id="correo"
               type="email"
               formControlName="correo"
+              class="form-control"
               placeholder="tu@email.com"
               autocomplete="email">
           </div>
           @if (f['correo'].invalid && f['correo'].touched) {
             <span class="form-error">
               @if (f['correo'].errors?.['required']) { El correo es obligatorio }
-              @if (f['correo'].errors?.['correo']) { Ingresa un correo válido }
+              @else if (f['correo'].errors?.['email']) { Ingresa un correo válido }
             </span>
           }
         </div>
 
-        <!-- Email -->
+        <!-- Contraseña -->
         <div class="form-group">
-          <label for="email">Correo electrónico</label>
+          <label for="contrasena">Contraseña</label>
           <div class="input-wrap">
             <span class="input-icon">🔒</span>
             <input
               id="contrasena"
               [type]="mostrarPassword ? 'text' : 'password'"
               formControlName="contrasena"
+              class="form-control"
               placeholder="Mínimo 6 caracteres"
               autocomplete="current-password">
             <button type="button" class="toggle-pass" (click)="togglePassword()">
               {{ mostrarPassword ? '👁️‍🗨️' : '👁️' }}
             </button>
           </div>
-          @if (f['email'].invalid && f['email'].touched) {
-            <span class="form-error">
-              @if (f['email'].errors?.['required']) { El email es obligatorio }
-              @if (f['email'].errors?.['email']) { Ingresa un email válido }
-            </span>
+          @if (f['contrasena'].invalid && f['contrasena'].touched) {
+            <span class="form-error">La contraseña debe tener al menos 6 caracteres</span>
           }
         </div>
 
@@ -81,34 +84,36 @@
           <div class="registro-error">{{ errorMsg }}</div>
         }
 
-        <button type="submit" class="btn-registro" >
-          {{ cargando ? 'Registrando...' : 'Registrarse' }}
+        <button type="submit" class="btn-registro" [disabled]="cargando">
+          {{ cargando ? 'Procesando...' : (f['Id_usuario']?.value ? 'Actualizar Usuario' : 'Registrarse') }}
         </button>
       </form>
       } @else {
         <div class="exito-container">
           <span class="exito-icon">✅</span> 
-          <p class="exito-titulo">¡Registro exitoso!</p>
-          <p class="exito-desc">Ya puedes iniciar sesión con tu cuenta.</p>
+          <p class="exito-titulo">¡Operación exitosa!</p>
+          <p class="exito-desc">Los datos se han guardado correctamente.</p>
+          <button class="btn-registro" (click)="usuarioCreado = false">Añadir otro</button>
         </div>
       }
 
-      <div class="usuarios-lista">
+      <!-- Listado de Usuarios -->
+      <div class="usuarios-lista" id="usuarios">
         <h2 class="usuarios-title">Usuarios registrados</h2>
-        @if (usuarios.length === 0) {
+        @if (registros.length === 0) {
           <p class="usuarios-vacio">Todavía no hay usuarios guardados.</p>
         } @else {
           <div class="usuarios-grid">
-            @for (usuario of usuarios; track usuario.id) {
+            @for (usuario of registros; track usuario.Id_usuario) {
               <article class="usuario-card">
                 <div class="usuario-info">
                   <strong>{{ usuario.nombre }}</strong>
-                  <span>{{ usuario.email }}</span>
-                  <span>{{ usuario.telefono }}</span>
+                  <span>{{ usuario.correo }}</span>
+                  <small>Edad: {{ usuario.edad }}</small>
                 </div>
                 <div class="usuario-actions">
-                  <button type="button" class="action-btn" (click)="editarUsuario(usuario)">Editar</button>
-                  <button type="button" class="action-btn danger" (click)="eliminarUsuario(usuario.id)">Eliminar</button>
+                  <button type="button" class="action-btn" (click)="iniciarEdicion(usuario)">Editar</button>
+                  <button type="button" class="action-btn danger" (click)="eliminarUsuario(usuario.Id_usuario)">Eliminar</button>
                 </div>
               </article>
             }

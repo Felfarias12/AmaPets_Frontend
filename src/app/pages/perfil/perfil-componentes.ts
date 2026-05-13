@@ -1,179 +1,91 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { Usuario } from '../../models/usuario.model';
-import { CommonModule, DatePipe, UpperCasePipe } from '@angular/common';
-import { Mascota, CitaHistorial } from '../../models/mascota.model';
-import { FichaClinica, Vacuna } from '../../models/fichaClinica.model';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, DatePipe, UpperCasePipe],
+  imports: [CommonModule],
   templateUrl: './perfil-componentes.html',
   styleUrls: ['./perfil-componentes.scss']
 })
-export class PerfilComponent {
-
-  seccionActiva: 'mascotas' | 'citas' | 'ficha-clinica' = 'mascotas';
-  subSeccionFicha: 'historial' | 'vacunas' | 'medicamentos' = 'historial';
-
-  usuario: Usuario = {
-    id: 1,
-    nombre: 'Juan García',
-    email: 'juan@email.com',
-    telefono: '+56 9 1234 5678',
-    contrasena: '********',
-    edad: 30
+export class PerfilComponent implements OnInit {
+  
+  usuario = {
+    nombre: 'Felipe Alberto',
+    email: 'felipe@example.com'
   };
 
-  mascotas: Mascota[] = [
+  seccionActiva: string = 'mascotas';
+  // 🔥 Importante: Esta variable controla las pestañas de la Ficha Clínica
+  subSeccionFicha: string = 'historial'; 
+
+  mascotas = [
+    { id: 1, nombre: 'Luna', raza: 'Husky', especie: 'perro', edad: 3, peso: 18, emoji: '🐺', colorClase: 'azul' },
+    { id: 2, nombre: 'Simba', raza: 'Persa', especie: 'gato', edad: 5, peso: 4, emoji: '🐱', colorClase: 'naranja' }
+  ];
+
+  citas = [
+    { id: 101, fecha: new Date(), hora: '10:30', servicio: 'Vacunación', mascotaNombre: 'Luna', veterinario: 'Dr. Pérez', estado: 'confirmada' },
+    { id: 102, fecha: new Date(), hora: '16:00', servicio: 'Chequeo General', mascotaNombre: 'Simba', veterinario: 'Dra. Soto', estado: 'pendiente' }
+  ];
+
+  // 🔥 Renombrado de 'fichasClinicas' a 'fichas' para que coincida con el @for del HTML
+  fichas = [
     {
       id: 1,
-      nombre: 'Luna',
-      especie: 'perro',
-      raza: 'Golden Retriever',
-      edad: 3,
-      peso: 28,
-      emoji: '🐶',
-      colorClase: 'teal'
-    },
-    {
-      id: 2,
-      nombre: 'Michi',
-      especie: 'gato',
-      raza: 'Siamés',
-      edad: 5,
-      peso: 4,
-      emoji: '🐱',
-      colorClase: 'coral'
-    },
-    {
-      id: 3,
-      nombre: 'Coco',
-      especie: 'conejo',
-      raza: 'Holland Lop',
-      edad: 1,
-      peso: 2,
-      emoji: '🐰',
-      colorClase: 'amber'
+      fecha: new Date('2026-05-01'),
+      motivo: 'Vacuna Sextuple',
+      veterinario: 'Dr. Pérez',
+      peso: 18,
+      temperatura: '38.5°',
+      diagnostico: 'Salud óptima',
+      tratamiento: 'Refuerzo aplicado correctamente.',
+      notas: 'Siguiente refuerzo en 12 meses.'
     }
   ];
 
-  citas: CitaHistorial[] = [
-    {
-      id: 1,
-      mascotaNombre: 'Luna',
-      servicio: 'Consulta general',
-      fecha: '2026-05-10',
-      hora: '10:00',
-      veterinario: 'Dra. Camila Rojas',
-      estado: 'confirmada'
-    },
-    {
-      id: 2,
-      mascotaNombre: 'Michi',
-      servicio: 'Vacunación',
-      fecha: '2026-04-22',
-      hora: '15:30',
-      veterinario: 'Dr. Andrés Méndez',
-      estado: 'completada'
-    },
-    {
-      id: 3,
-      mascotaNombre: 'Luna',
-      servicio: 'Odontología',
-      fecha: '2026-03-15',
-      hora: '09:00',
-      veterinario: 'Dra. Camila Rojas',
-      estado: 'completada'
-    },
-    {
-      id: 4,
-      mascotaNombre: 'Coco',
-      servicio: 'Consulta general',
-      fecha: '2026-05-20',
-      hora: '11:00',
-      veterinario: 'Dra. Valentina Cruz',
-      estado: 'pendiente'
-    }
+  // 🔥 Añadidas para evitar errores TS2339
+  vacunas = [
+    { nombre: 'Sextuple', estado: 'al dia', fechaAplicacion: new Date(), proximaDosis: new Date(), lote: 'AB123' }
   ];
 
-  fichas: FichaClinica[] = [
-    {
-      id: 1, mascotaId: 1, fecha: '2025-04-10', motivo: 'Control anual',
-      veterinario: 'Dr. Andrés Pérez', diagnostico: 'Paciente en buen estado general',
-      tratamiento: 'Desparasitación interna y externa', peso: 28.5, temperatura: '38.4°C',
-      notas: 'Se recomienda dieta balanceada y ejercicio diario'
-    }
-  ];
+medicamentos: any[] = [];
 
-  vacunas: Vacuna[] = [
-    { nombre: 'Polivalente', fechaAplicacion: '2025-03-15', proximaDosis: '2026-03-15', lote: 'VAX-2025-031', estado: 'vigente' },
-    { nombre: 'Bordetella', fechaAplicacion: '2024-09-10', proximaDosis: '2025-09-10', lote: 'BOR-2024-092', estado: 'vencida' }
-  ];
+  constructor() {}
 
-  medicamentos = [
-  {
-    nombre: 'Nexgard (Antipulgas)',
-    fechaInicio: '2026-01-01',
-    dosis: '1 comprimido',
-    frecuencia: 'Mensual',
-    duracion: 'Permanente',
-    estado: 'activo'
-  },
-  {
-    nombre: 'Metronidazol 250mg',
-    fechaInicio: '2025-12-05',
-    dosis: '1 comprimido',
-    frecuencia: 'Cada 12 horas',
-    duracion: '5 días',
-    estado: 'finalizado'
-  }
-];
+  ngOnInit(): void {}
 
-  constructor(private router: Router) {}
+  // --- MÉTODOS ---
 
-  cambiarSeccion(seccion: 'mascotas' | 'citas' | 'ficha-clinica'): void {
+  cambiarSeccion(seccion: string) {
     this.seccionActiva = seccion;
   }
 
-  cambiarSubSeccion(sub: 'historial' | 'vacunas' | 'medicamentos') {
+  // 🔥 Este método faltaba y lo pide el (click) del HTML
+  cambiarSubSeccion(sub: string) {
     this.subSeccionFicha = sub;
   }
 
-
-  nuevaCita(): void {
-    this.router.navigate(['/'], { fragment: 'citas' });
-  }
-
-  cerrarSesion(): void {
-    this.router.navigate(['/login']);
-  }
-
   iniciales(): string {
-    return this.usuario.nombre
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
-  }
-
-  etiquetaEspecie(especie: string): string {
-    const map: Record<string, string> = {
-      perro: 'Perro', gato: 'Gato',
-      conejo: 'Conejo', ave: 'Ave', otro: 'Otro'
-    };
-    return map[especie] ?? especie;
-  }
-
-  formatFecha(fecha: string): string {
-    const [y, m, d] = fecha.split('-');
-    const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-    return `${d} ${meses[parseInt(m) - 1]} ${y}`;
+    return this.usuario.nombre.split(' ').map(n => n[0]).join('').toUpperCase();
   }
 
   citasPendientes(): number {
     return this.citas.filter(c => c.estado === 'confirmada' || c.estado === 'pendiente').length;
   }
+
+  etiquetaEspecie(especie: string): string {
+    return especie === 'perro' ? 'Canino' : 'Felino';
+  }
+
+  formatFecha(fecha: any): string {
+    return new Date(fecha).toLocaleDateString('es-ES', { 
+      day: '2-digit', 
+      month: 'short', 
+      year: 'numeric' 
+    });
+  }
+
+  nuevaCita() { console.log('Nueva cita...'); }
+  cerrarSesion() { console.log('Cerrar sesión...'); }
 }

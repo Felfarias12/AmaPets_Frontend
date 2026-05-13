@@ -75,7 +75,6 @@
           }
         </p>
       </div>
-      
     </div>
 
     <!-- ===== SECCIÓN MASCOTAS ===== -->
@@ -114,7 +113,7 @@
         </div>
       </div>
     }
-    
+
     <!-- ===== SECCIÓN CITAS ===== -->
     @if (seccionActiva === 'citas') {
       <div class="citas-lista">
@@ -133,7 +132,7 @@
             </div>
 
             <span class="cita-estado" [class]="'estado-' + c.estado">
-              @if ( c.estado === 'confirmada') { Confirmada }
+              @if (c.estado === 'confirmada') { Confirmada }
               @if (c.estado === 'pendiente')  { Pendiente }
               @if (c.estado === 'completada') { Completada }
               @if (c.estado === 'cancelada')  { Cancelada }
@@ -144,10 +143,110 @@
       <br>
       <button class="btn-accion" (click)="nuevaCita()">+ Agendar cita</button>
     }
+
+    <!-- ===== SECCIÓN Ficha Clinica ===== -->
+   @if (seccionActiva === 'ficha-clinica') {
+  <div class="mascota-header-card">
+    <div class="header-main">
+      <span class="avatar-grande">🐶</span>
+      <div class="header-datos">
+        <div class="title-row">
+          <h2>Luna</h2>
+          <span class="tag-especie">CANINO</span>
+          <span class="tag-check">✓ ESTERILIZADA</span>
+        </div>
+        <p class="sub-datos">Golden Retriever · Hembra · 3 años · Dorado</p>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="stat-pill"><strong>28.5 kg</strong><span>PESO</span></div>
+      <div class="stat-pill"><strong>3</strong><span>CONSULTAS</span></div>
+      <div class="stat-pill"><strong>3</strong><span>VACUNAS</span></div>
+    </div>
+  </div>
+
+  <div class="sub-nav-container">
+    <div class="tabs-internas">
+      <button (click)="cambiarSubSeccion('historial')" [class.active]="subSeccionFicha === 'historial'">📋 Historial clínico</button>
+      <button (click)="cambiarSubSeccion('vacunas')" [class.active]="subSeccionFicha === 'vacunas'">💉 Vacunación</button>
+      <button (click)="cambiarSubSeccion('medicamentos')" [class.active]="subSeccionFicha === 'medicamentos'">💊 Medicamentos</button>
+    </div>
+  </div>
+
+  <div class="ficha-body">
+    @if (subSeccionFicha === 'historial') {
+      @for (f of fichas; track f.id) {
+        <div class="card-historial">
+          <div class="card-historial-top">
+            <div class="fecha-box">
+              <span class="dia">{{ f.fecha | date:'dd' }}</span>
+              <span class="mes">{{ f.fecha | date:'MMM' | uppercase }}</span>
+            </div>
+            <div class="motivo-box">
+              <h3>{{ f.motivo }}</h3>
+              <p>👨‍⚕️ {{ f.veterinario }}</p>
+            </div>
+            <div class="stats-box">
+              <span>⚖️ {{ f.peso }} kg</span>
+              <span>🌡️ {{ f.temperatura }}</span>
+            </div>
+          </div>
+          <div class="card-historial-detalles">
+            <p><strong>DIAGNÓSTICO:</strong> {{ f.diagnostico }}</p>
+            <p><strong>TRATAMIENTO:</strong> {{ f.tratamiento }}</p>
+            @if (f.notas) { <p><strong>NOTAS:</strong> <em>{{ f.notas }}</em></p> }
+          </div>
+        </div>
+      }
+    }
+
+    @if (subSeccionFicha === 'vacunas') {
+      <div class="vacunas-grid">
+        @for (v of vacunas; track v.nombre) {
+          <div class="vacuna-card" [class.vencida]="v.estado === 'vencida'">
+            <div class="vacuna-header">
+              <span>💉 <strong>{{ v.nombre }}</strong></span>
+              <span class="status-tag">{{ v.estado | uppercase }}</span>
+            </div>
+            <div class="vacuna-info">
+              <p>APLICADA: {{ formatFecha(v.fechaAplicacion) }}</p>
+              <p>PRÓXIMA: <strong>{{ formatFecha(v.proximaDosis) }}</strong></p>
+              <p>LOTE: {{ v.lote }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    @if (subSeccionFicha === 'medicamentos') {
+      <div class="medicamentos-lista">
+        @for (m of medicamentos; track m.nombre) {
+          <div class="medicamento-item">
+            <div class="med-principal">
+              <span class="med-icon">💊</span>
+              <div>
+                <p class="med-nombre">{{ m.nombre }}</p>
+                <p class="med-desde">Desde el {{ formatFecha(m.fechaInicio) }}</p>
+              </div>
+            </div>
+            <div class="med-stats">
+              <div class="m-pill"><strong>Dosis</strong> {{ m.dosis }}</div>
+              <div class="m-pill"><strong>Frecuencia</strong> {{ m.frecuencia }}</div>
+              <div class="m-pill"><strong>Duración</strong> {{ m.duracion }}</div>
+            </div>
+            <span class="tag-estado" [class.activo]="m.estado === 'activo'">
+              {{ m.estado | uppercase }}
+            </span>
+          </div>
+        } @empty {
+          <p class="no-data">No hay medicamentos registrados.</p>
+        }
+      </div>
+    }
   </div>  
 }
 
-    <!-- ===== SECCIÓN Ficha Clinica ===== -->
+
 
   </main>
 </div>
