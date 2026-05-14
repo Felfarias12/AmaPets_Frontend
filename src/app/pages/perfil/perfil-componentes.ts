@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MascotaComponentes } from '../mascota-componentes/mascota-componentes';
 
 @Component({
   selector: 'app-perfil',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MascotaComponentes],
   templateUrl: './perfil-componentes.html',
   styleUrls: ['./perfil-componentes.scss']
 })
 export class PerfilComponent implements OnInit {
   
+  @ViewChild('modalMascota') modalMascota!: MascotaComponentes;
+
   usuario = {
     nombre: 'Felipe Alberto',
     email: 'felipe@example.com'
@@ -56,6 +58,15 @@ medicamentos: any[] = [];
   ngOnInit(): void {}
 
   // --- MÉTODOS ---
+
+  abrirModalMascota() {
+    this.modalMascota.abrirModal();
+  }
+
+  obtenerMascotas() {
+    console.log('Recargando mascotas desde el servidor...');
+    // Aquí iría la lógica de tu mascota-service.ts
+  }
 
   cambiarSeccion(seccion: string) {
     this.seccionActiva = seccion;
