@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
-import { Mascota } from '../models/mascota.model';
+
 
 
 @Injectable({
@@ -11,20 +11,30 @@ import { Mascota } from '../models/mascota.model';
 export class MascotaService {
   private http=inject(HttpClient);
 
-  obtnerMascotas(): Observable<Mascota[]>{
-    return this.http.get<Mascota[]>(environment.apiUrlMascotas);
+  obtnerMascotas(): Observable<AgregarMascota[]>{
+    return this.http.get<AgregarMascota[]>(environment.apiUrlMascotas);
   }
 
-  crearMascota(mascota: Mascota): Observable<Mascota>{
-    return this.http.post<Mascota>(environment.apiUrlMascotas, mascota);
+  crearMascota(mascota: AgregarMascota): Observable<AgregarMascota>{
+    return this.http.post<AgregarMascota>(environment.apiUrlMascotas, mascota);
   }
 
-  editarMascota(mascota: Mascota): Observable<Mascota>{
-    return this.http.put<Mascota>(`${environment.apiUrlMascotas}/${mascota.id}`, mascota);
+  editarMascota(mascota: AgregarMascota): Observable<AgregarMascota>{
+    return this.http.put<AgregarMascota>(`${environment.apiUrlMascotas}/${mascota.id_mascota}`, mascota);
   } 
 
   eliminarMascota(id: number): Observable<void>{
     return this.http.delete<void>(`${environment.apiUrlMascotas}/${id}`);
   }
 
+}
+
+interface AgregarMascota {
+  id_mascota: number; 
+  nombre: string;
+  edad: number;
+  genero: string;      // ¡Este es el que faltaba!
+  especie: 'perro' | 'gato' | 'conejo' | 'ave' | 'otro';
+  peso: number;
+  vacunado: boolean;   // Asegúrate de incluirlo si lo vas a mandar desde el formulario
 }

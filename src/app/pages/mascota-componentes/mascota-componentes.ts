@@ -2,13 +2,14 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MascotaService } from '../../service/mascota-service';
-import { ReactiveFormsModule } from '@angular/forms'; // Para [formGroup]
+import { ReactiveFormsModule } from '@angular/forms'; 
 
 @Component({
   selector: 'app-mascota-componentes',
+  standalone: true, // Asegúrate de dejarlo si usas imports directos
   imports: [
-    CommonModule,        // Soluciona el error de *ngIf
-    ReactiveFormsModule  // Soluciona el error de [formGroup]
+    CommonModule,        
+    ReactiveFormsModule  
   ],
   templateUrl: './mascota-componentes.html',
   styleUrls: ['./mascota-componentes.scss']
@@ -21,9 +22,9 @@ export class MascotaComponentes {
   constructor(private fb: FormBuilder, private mascotaService: MascotaService) {
     this.mascotaForm = this.fb.group({
       nombre: ['', Validators.required],
-      especie: ['Canino', Validators.required],
-      raza: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required],
+      especie: ['perro', Validators.required], // Ajustado a los valores string válidos de tu interfaz
+      genero: ['', Validators.required],       // ¡Nuevo campo obligatorio!
+      edad: [0, [Validators.required, Validators.min(0)]], // Reemplaza fechaNacimiento
       peso: [0, [Validators.required, Validators.min(0)]]
     });
   }
@@ -34,23 +35,29 @@ export class MascotaComponentes {
 
   cerrarModal() {
     this.mostrarModal = false;
-    this.mascotaForm.reset({ especie: 'Canino' });
+    this.mascotaForm.reset({ especie: 'perro', edad: 0, peso: 0, genero: '' });
   }
 
   guardarMascota() {
     if (this.mascotaForm.valid) {
-      this.mascotaService.crearMascota(this.mascotaForm.value).subscribe({
+      // Construimos el objeto exacto que espera tu backend (Mascota.java)
+      const payload = {
+        ...this.mascotaForm.value,
+        vacunado: false // Evitamos el error de nulidad enviando un valor por defecto
+      };
+
+      this.mascotaService.crearMascota(payload).subscribe({
         next: (res) => {
-          console.log('Mascota guardada', res);
-          this.mascotaAgregada.emit(); // Avisa a perfil para recargar la lista
+          console.log('Mascota guardada con éxito', res);
+          this.mascotaAgregada.emit(); 
           this.cerrarModal();
         },
-        error: (err) => console.error('Error al guardar', err)
+        error: (err) => console.error('Error al guardar en el servidor', err)
       });
     }
   }
 
   onFileSelected(event: any) {
-    // Lógica para manejar la imagen si es necesario
+    // Lógica para manejar la imagen (actualmente ignorada por el backend)
   }
 }
