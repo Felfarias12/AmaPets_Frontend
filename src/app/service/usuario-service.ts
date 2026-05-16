@@ -13,18 +13,18 @@ export class UsuarioService {
  private http = inject(HttpClient);
 
  obtenerUsuarios(): Observable<Usuario[]> {
-  return this.http.get<Usuario[]>(this.apiUrlUsuarios);
+  return this.http.get<Usuario[]>(environment.apiUrlUsuarios);
  }
 
  crearUsuario(usuario: Usuario): Observable<Usuario> {
-  return this.http.post<Usuario>(this.apiUrlUsuarios, usuario);
+  return this.http.post<Usuario>(environment.apiUrlUsuarios, usuario);
  }
 
  editarUsuario(usuario: Usuario): Observable<Usuario> {
-  return this.http.put<Usuario>(`${this.apiUrlUsuarios}/${usuario.id}`, usuario);
+  return this.http.put<Usuario>(`${environment.apiUrlUsuarios}/${usuario.id}`, usuario);
  }
 
  eliminarUsuario(id: number): Observable<void> {
-  return this.http.delete<void>(`${this.apiUrlUsuarios}/${id}`);
+  return this.http.delete<void>(`${environment.apiUrlUsuarios}/${id}`);
  }
 }

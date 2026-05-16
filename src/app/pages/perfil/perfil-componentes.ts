@@ -1,10 +1,11 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MascotaComponentes } from '../mascota-componentes/mascota-componentes';
+import { FichaClinicaComponent } from '../ficha-clinica-component/ficha-clinica-component';
 
 @Component({
   selector: 'app-perfil',
-  imports: [CommonModule, MascotaComponentes],
+  imports: [CommonModule, MascotaComponentes, FichaClinicaComponent],
   templateUrl: './perfil-componentes.html',
   styleUrls: ['./perfil-componentes.scss']
 })
@@ -20,6 +21,7 @@ export class PerfilComponent implements OnInit {
   seccionActiva: string = 'mascotas';
   // 🔥 Importante: Esta variable controla las pestañas de la Ficha Clínica
   subSeccionFicha: string = 'historial'; 
+  mascotaSeleccionada: any = null;
 
   mascotas = [
     { id: 1, nombre: 'Luna', raza: 'Husky', especie: 'perro', edad: 3, peso: 18, emoji: '🐺', colorClase: 'azul' },
@@ -70,6 +72,11 @@ medicamentos: any[] = [];
 
   cambiarSeccion(seccion: string) {
     this.seccionActiva = seccion;
+  }
+
+  verFicha(mascota: any) {
+    this.mascotaSeleccionada = mascota;
+    this.seccionActiva = 'ficha-clinica';
   }
 
   // 🔥 Este método faltaba y lo pide el (click) del HTML
