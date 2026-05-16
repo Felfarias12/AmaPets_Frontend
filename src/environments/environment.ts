@@ -5,4 +5,4 @@ export const environment = {
     apiUrlMascotas: 'http://localhost:7579/mascotas',
     apiUrlUsuarios: 'http://localhost:7575/usuarios',
     apiUrlFichasClinicas: 'http://localhost:7577/fichas'
-};
+}
