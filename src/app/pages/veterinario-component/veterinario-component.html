@@ -1,0 +1,308 @@
+<!-- =============================================
+     AMAPETS — Vista Veterinario
+     ============================================= -->
+
+<div class="vet-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🐾</div>
+      <span class="logo-text">AmaPets</span>
+    </div>
+
+    <div class="sidebar-profile">
+      <div class="profile-avatar avatar-{{ veterinario.colorClase }}">
+        {{ veterinario.emoji }}
+      </div>
+      <div class="profile-info">
+        <p class="profile-nombre">{{ veterinario.nombre }}</p>
+        <p class="profile-rol">{{ veterinario.rol }}</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item" [class.active]="tabActiva() === 'citas'" (click)="setTab('citas')">
+        <span class="nav-icon">📅</span>
+        <span>Citas del día</span>
+        <span class="nav-badge">{{ citasHoy.length }}</span>
+      </button>
+      <button class="nav-item" [class.active]="tabActiva() === 'pacientes'" (click)="setTab('pacientes')">
+        <span class="nav-icon">🐾</span>
+        <span>Pacientes</span>
+      </button>
+      <button class="nav-item" [class.active]="tabActiva() === 'fichas'" (click)="setTab('fichas')">
+        <span class="nav-icon">📋</span>
+        <span>Fichas Clínicas</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="status-dot"></div>
+      <span class="status-text">En consulta</span>
+    </div>
+  </aside>
+
+  <!-- ── CONTENIDO PRINCIPAL ── -->
+  <main class="vet-main">
+
+    <!-- Header principal -->
+    <header class="vet-header">
+      <div class="header-left">
+        <p class="header-greeting">Buenos días, <strong>{{ veterinario.nombre }}</strong> 👋</p>
+        <p class="header-fecha">Sábado, 16 de Mayo de 2025</p>
+      </div>
+      <div class="header-right">
+        @if (proximaCita()) {
+          <div class="proxima-cita-badge">
+            <span class="proxima-icon">⏰</span>
+            <div>
+              <p class="proxima-label">Próxima cita</p>
+              <p class="proxima-info">{{ proximaCita()!.hora }} · {{ proximaCita()!.nombreMascota }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </header>
+
+    <!-- Tarjetas de estadísticas -->
+    <section class="estadisticas-grid">
+      @for (stat of estadisticas; track stat.etiqueta) {
+        <div class="stat-card stat-{{ stat.color }}">
+          <div class="stat-icono">{{ stat.icono }}</div>
+          <div class="stat-body">
+            <p class="stat-valor">{{ stat.valor }}</p>
+            <p class="stat-etiqueta">{{ stat.etiqueta }}</p>
+          </div>
+        </div>
+      }
+    </section>
+
+    <!-- ══ TAB: CITAS DEL DÍA ══ -->
+    @if (tabActiva() === 'citas') {
+      <section class="content-section">
+        <div class="section-head">
+          <h2 class="section-titulo">Agenda del día</h2>
+          <span class="section-sub">{{ citasHoy.length }} citas programadas</span>
+        </div>
+
+        <div class="citas-lista">
+          @for (cita of citasHoy; track cita.id) {
+            <div class="cita-card" [class]="'cita-' + cita.estado">
+              <!-- Hora -->
+              <div class="cita-hora">
+                <span class="hora-texto">{{ cita.hora }}</span>
+                <div class="hora-linea"></div>
+              </div>
+
+              <!-- Info mascota -->
+              <div class="cita-info">
+                <div class="cita-avatar avatar-{{ cita.colorClase }}">{{ cita.emoji }}</div>
+                <div class="cita-datos">
+                  <p class="cita-nombre">{{ cita.nombreMascota }}
+                    <span class="cita-especie">· {{ cita.especie }}</span>
+                  </p>
+                  <p class="cita-duenio">👤 {{ cita.duenio }}</p>
+                </div>
+              </div>
+
+              <!-- Servicio -->
+              <div class="cita-servicio">
+                <span class="servicio-tag">{{ cita.servicio }}</span>
+              </div>
+
+              <!-- Estado + acciones -->
+              <div class="cita-estado-wrap">
+                <span class="estado-badge estado-{{ cita.estado }}">
+                  {{ estadoLabel(cita.estado) }}
+                </span>
+                @if (cita.estado === 'pendiente') {
+                  <button class="btn-accion btn-iniciar" (click)="marcarEnCurso(cita)">
+                    Iniciar
+                  </button>
+                }
+                @if (cita.estado === 'en-curso') {
+                  <button class="btn-accion btn-completar" (click)="marcarCompletada(cita)">
+                    Completar
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    <!-- ══ TAB: PACIENTES ══ -->
+    @if (tabActiva() === 'pacientes') {
+      <section class="content-section">
+        <div class="section-head">
+          <h2 class="section-titulo">Mis Pacientes</h2>
+          <div class="busqueda-wrap">
+            <span class="busqueda-icono">🔍</span>
+            <input
+              class="busqueda-input"
+              type="text"
+              placeholder="Buscar por nombre, dueño o raza…"
+              [value]="busqueda()"
+              (input)="setBusqueda($any($event.target).value)"
+            />
+          </div>
+        </div>
+
+        <div class="pacientes-grid">
+          @for (p of pacientesFiltrados(); track p.id) {
+            <div class="paciente-card">
+              <div class="paciente-header">
+                <div class="paciente-avatar avatar-{{ p.colorClase }}">{{ p.emoji }}</div>
+                <div>
+                  <p class="paciente-nombre">{{ p.nombre }}</p>
+                  <p class="paciente-raza">{{ p.raza }} · {{ p.especie }}</p>
+                </div>
+              </div>
+
+              <div class="paciente-detalles">
+                <div class="detalle-item">
+                  <span class="detalle-label">Edad</span>
+                  <span class="detalle-valor">{{ p.edad }} años</span>
+                </div>
+                <div class="detalle-item">
+                  <span class="detalle-label">Peso</span>
+                  <span class="detalle-valor">{{ p.peso }} kg</span>
+                </div>
+                <div class="detalle-item">
+                  <span class="detalle-label">Dueño</span>
+                  <span class="detalle-valor">{{ p.duenio }}</span>
+                </div>
+                <div class="detalle-item">
+                  <span class="detalle-label">Última visita</span>
+                  <span class="detalle-valor visita-reciente">{{ p.ultimaVisita }}</span>
+                </div>
+              </div>
+
+              <button class="btn-ficha" (click)="abrirModalFicha(p)">
+                📋 Nueva ficha clínica
+              </button>
+            </div>
+          }
+
+          @if (pacientesFiltrados().length === 0) {
+            <div class="sin-resultados">
+              <span>🔍</span>
+              <p>No se encontraron pacientes con ese criterio.</p>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    <!-- ══ TAB: FICHAS CLÍNICAS ══ -->
+    @if (tabActiva() === 'fichas') {
+      <section class="content-section">
+        <div class="section-head">
+          <h2 class="section-titulo">Fichas Clínicas Recientes</h2>
+          <span class="section-sub">Historial de atenciones registradas</span>
+        </div>
+
+        <div class="fichas-lista">
+          @for (f of fichasRecientes; track f.id) {
+            <div class="ficha-row">
+              <div class="ficha-emoji-wrap">{{ f.emoji }}</div>
+              <div class="ficha-datos">
+                <p class="ficha-mascota">{{ f.mascota }}</p>
+                <p class="ficha-motivo">{{ f.motivo }}</p>
+              </div>
+              <div class="ficha-diagnostico">
+                <span class="diagnostico-tag">{{ f.diagnostico }}</span>
+              </div>
+              <div class="ficha-meta">
+                <p class="ficha-fecha">📅 {{ f.fecha }}</p>
+                <p class="ficha-vet">👩‍⚕️ {{ f.veterinario }}</p>
+              </div>
+              <button class="btn-ver-ficha">Ver detalle →</button>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+  </main>
+</div>
+
+<!-- ══ MODAL NUEVA FICHA CLÍNICA ══ -->
+@if (mostrarModalFicha()) {
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal-panel" (click)="$event.stopPropagation()">
+
+      @if (!fichaEnviada()) {
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <div class="modal-avatar avatar-{{ pacienteSeleccionado()?.colorClase }}">
+              {{ pacienteSeleccionado()?.emoji }}
+            </div>
+            <div>
+              <h3 class="modal-titulo">Nueva Ficha Clínica</h3>
+              <p class="modal-subtitulo">{{ pacienteSeleccionado()?.nombre }} · {{ pacienteSeleccionado()?.raza }}</p>
+            </div>
+          </div>
+          <button class="modal-cerrar" (click)="cerrarModal()">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="modal-row">
+            <div class="modal-group">
+              <label>Motivo de consulta *</label>
+              <input type="text" [(ngModel)]="fichaForm.motivo" placeholder="Ej. Control rutinario, fiebre…" />
+            </div>
+            <div class="modal-group">
+              <label>Temperatura</label>
+              <input type="text" [(ngModel)]="fichaForm.temperatura" placeholder="Ej. 38.5°C" />
+            </div>
+          </div>
+
+          <div class="modal-row">
+            <div class="modal-group">
+              <label>Diagnóstico *</label>
+              <input type="text" [(ngModel)]="fichaForm.diagnostico" placeholder="Ej. Gastroenteritis leve" />
+            </div>
+            <div class="modal-group">
+              <label>Peso actual (kg)</label>
+              <input type="number" [(ngModel)]="fichaForm.peso" placeholder="Ej. 4.2" step="0.1" />
+            </div>
+          </div>
+
+          <div class="modal-group modal-full">
+            <label>Tratamiento *</label>
+            <input type="text" [(ngModel)]="fichaForm.tratamiento" placeholder="Ej. Amoxicilina 250mg cada 12h por 7 días" />
+          </div>
+
+          <div class="modal-group modal-full">
+            <label>Notas adicionales</label>
+            <textarea [(ngModel)]="fichaForm.notas" rows="3" placeholder="Observaciones, seguimientos recomendados…"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+          <button
+            class="btn-guardar"
+            (click)="guardarFicha()"
+            [disabled]="!fichaForm.motivo || !fichaForm.diagnostico || !fichaForm.tratamiento"
+          >
+            💾 Guardar ficha
+          </button>
+        </div>
+      }
+
+      @if (fichaEnviada()) {
+        <div class="modal-exito">
+          <span class="exito-icon">✅</span>
+          <h3 class="exito-titulo">¡Ficha registrada!</h3>
+          <p class="exito-desc">La ficha clínica de <strong>{{ pacienteSeleccionado()?.nombre }}</strong> fue guardada correctamente.</p>
+          <button class="btn-guardar" (click)="cerrarModal()">Volver al panel</button>
+        </div>
+      }
+
+    </div>
+  </div>
+}
