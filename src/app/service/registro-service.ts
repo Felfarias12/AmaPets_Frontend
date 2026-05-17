@@ -21,17 +21,17 @@ crearRegistro(registro: bodyAgregaRegistro): Observable<bodyAgregaRegistro> {
 }
 
 editarRegistro(registro: bodyAgregaRegistro): Observable<bodyAgregaRegistro> {
- return this.http.put<bodyAgregaRegistro>(`${environment.apiUrlRegistros}/${registro.Id_usuario}`, registro);
+ return this.http.put<bodyAgregaRegistro>(`${environment.apiUrlRegistros}/${registro.id_usuario!}`, registro);
 }
 
-eliminarRegistro(id: number): Observable<void> {
- return this.http.delete<void>(`${environment.apiUrlRegistros}/${id}`);
+eliminarRegistro(id: number): Observable<string> {
+  return this.http.delete(`${environment.apiUrlRegistros}/${id}`, { responseType: 'text' });
 }
 }
 
 // Interfaz
 export interface bodyAgregaRegistro {
- Id_usuario: number;
+ id_usuario?: number;
  nombre: string;
  correo: string;
  contrasena: string;

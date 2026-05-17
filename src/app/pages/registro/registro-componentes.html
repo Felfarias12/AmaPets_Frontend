@@ -85,7 +85,7 @@
         }
 
         <button type="submit" class="btn-registro" [disabled]="cargando">
-          {{ cargando ? 'Procesando...' : (f['Id_usuario']?.value ? 'Actualizar Usuario' : 'Registrarse') }}
+          {{ cargando ? 'Procesando...' : (f['id_usuario']?.value ? 'Actualizar Usuario' : 'Registrarse') }}
         </button>
       </form>
       } @else {
@@ -104,17 +104,18 @@
           <p class="usuarios-vacio">Todavía no hay usuarios guardados.</p>
         } @else {
           <div class="usuarios-grid">
-            @for (usuario of registros; track usuario.Id_usuario) {
+            @for (usuario of registros; track usuario.id_usuario) {
               <article class="usuario-card">
                 <div class="usuario-info">
-                  <strong>{{ usuario.nombre }}</strong>
-                  <span>{{ usuario.correo }}</span>
-                  <small>Edad: {{ usuario.edad }}</small>
+                  <p>Nombre: {{ usuario.nombre }}</p>
+                  <p>Correo: {{ usuario.correo }}</p>
+                  <p>Edad: {{ usuario.edad }}</p>
+                    <div class="usuario-actions">
+                      <button type="button" class="action-btn" (click)="iniciarEdicion(usuario)">Editar</button>
+                      <button type="button" class="action-btn danger" (click)="eliminarUsuario(usuario.id_usuario!)">Eliminar</button>
+                  </div>
                 </div>
-                <div class="usuario-actions">
-                  <button type="button" class="action-btn" (click)="iniciarEdicion(usuario)">Editar</button>
-                  <button type="button" class="action-btn danger" (click)="eliminarUsuario(usuario.Id_usuario)">Eliminar</button>
-                </div>
+                
               </article>
             }
           </div>

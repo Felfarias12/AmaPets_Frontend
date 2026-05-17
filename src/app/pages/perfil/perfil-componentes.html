@@ -11,7 +11,7 @@
       <div class="usuario-avatar">{{ iniciales() }}</div>
       <div class="usuario-info">
         <p class="usuario-nombre">{{ usuario.nombre }}</p>
-        <p class="usuario-email">{{ usuario.email }}</p>
+        <p class="usuario-email">{{ usuario.correo }}</p>
       </div>
     </div>
 
@@ -81,7 +81,7 @@
     <!-- ===== SECCIÓN MASCOTAS ===== -->
     @if (seccionActiva === 'mascotas') {
       <div class="mascotas-grid">
-        @for (m of mascotas; track m.id) {
+        @for (m of mascotas; track m.id_mascota) {
           <div class="mascota-card" [class]="'mascota-card mascota-' + m.colorClase">
             <div class="mascota-top">
               <div class="mascota-emoji-wrap">

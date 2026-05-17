@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { Router } from '@angular/router';
 import { bodyAgregaRegistro, RegistroService } from '../../service/registro-service';
 
+
 @Component({
   selector: 'app-registro',
   standalone: true,
@@ -27,14 +28,12 @@ export class RegistroComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Inicializamos el formulario con todos los campos necesarios desde el principio
     this.initForm();
     this.cargarUsuarios();
   }
 
   initForm(): void {
     this.registroForm = this.fb.group({
-      Id_usuario: [null], // null para nuevos registros
       nombre:     ['', [Validators.required, Validators.minLength(3)]],
       edad:       ['', [Validators.required, Validators.min(1), Validators.max(120)]],
       correo:     ['', [Validators.required, Validators.email]],
@@ -48,7 +47,6 @@ export class RegistroComponent implements OnInit {
     this.mostrarPassword = !this.mostrarPassword;
   }
 
-  // Getter para facilitar el acceso en el HTML
   get f() {
     return this.registroForm.controls;
   }
@@ -61,36 +59,26 @@ export class RegistroComponent implements OnInit {
 
     this.cargando = true;
     this.errorMsg = '';
-
-    // Si tiene Id_usuario, podríamos estar editando, si no, es creación.
-    // Para este ejemplo, seguiremos tu lógica de enviarRegistro (Creación).
     this.enviarRegistro();
   }
 
   enviarRegistro(): void {
     const datos = this.registroForm.value;
     
-    // Mapeo exacto para el Backend
     const nuevoUsuario: bodyAgregaRegistro = {
-      Id_usuario: datos.Id_usuario,
-      nombre:     datos.nombre,
-      correo:     datos.correo,
+      nombre: datos.nombre,
+      correo: datos.correo,
       contrasena: datos.contrasena,
-      edad:       datos.edad
-    };
+      edad: datos.edad,
+      };
 
     this.registroService.crearRegistro(nuevoUsuario).subscribe({
       next: (resp) => {
         console.log('✅ Operación exitosa:', resp);
         this.usuarioCreado = true;
         this.cargando = false;
-        
-        // Limpiamos el formulario y refrescamos la lista
         this.registroForm.reset();
         this.cargarUsuarios();
-        
-        // Opcional: Redirigir tras éxito
-        // setTimeout(() => this.router.navigate(['/login']), 2000);
       },
       error: (err) => {
         this.cargando = false;
@@ -110,9 +98,8 @@ export class RegistroComponent implements OnInit {
   }
 
   iniciarEdicion(usuario: bodyAgregaRegistro): void {
-    // Usamos patchValue para cargar los datos en el form existente sin destruirlo
     this.registroForm.patchValue({
-      Id_usuario: usuario.Id_usuario,
+      id_usuario: usuario.id_usuario, // ✅ corregido
       nombre:     usuario.nombre,
       correo:     usuario.correo,
       contrasena: usuario.contrasena,

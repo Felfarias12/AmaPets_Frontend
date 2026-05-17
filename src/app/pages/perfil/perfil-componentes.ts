@@ -1,114 +1,161 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MascotaComponentes } from '../mascota-componentes/mascota-componentes';
 import { Router } from '@angular/router';
+import { MascotaComponentes } from '../mascota-componentes/mascota-componentes';
 import { FichaClinicaComponent } from '../ficha-clinica-component/ficha-clinica-component';
-import { FormBuilder } from '@angular/forms';
+import { Usuario } from '../../models/usuario.model';
+import { Mascota } from '../../models/mascota.model';
+import { UsuarioService } from '../../service/usuario-service';
+import { MascotaService, AgregarMascota } from '../../service/mascota-service';
 
 @Component({
-  selector: 'app-perfil',
-  imports: [CommonModule, MascotaComponentes, FichaClinicaComponent],
-  templateUrl: './perfil-componentes.html',
-  styleUrls: ['./perfil-componentes.scss']
+ selector: 'app-perfil',
+ standalone: true,
+ imports: [CommonModule, MascotaComponentes, FichaClinicaComponent],
+ templateUrl: './perfil-componentes.html',
+ styleUrls: ['./perfil-componentes.scss']
 })
-export class PerfilComponent implements OnInit {
-  
-  @ViewChild('modalMascota') modalMascota!: MascotaComponentes;
 
-  usuario = {
-    nombre: 'Felipe Alberto',
-    email: 'felipe@example.com'
+export class PerfilComponent implements OnInit {
+ @ViewChild('modalMascota') modalMascota!: MascotaComponentes;
+ usuario: any = {};
+ mascotas: AgregarMascota[] = [];
+ seccionActiva  = 'mascotas';
+ subSeccionFicha = 'historial';
+ cargandoMascotas = false;
+ citas: any[] = [];
+ constructor(
+  private router:    Router,
+  private usuarioService: UsuarioService,
+  private mascotaService: MascotaService
+ ) {}
+
+
+
+ ngOnInit(): void {
+
+  this.cargarUsuarioDesdeSession();
+
+  this.cargarMascotas();
+
+ }
+
+
+
+ cargarUsuarioDesdeSession(): void {
+
+  const guardado = sessionStorage.getItem('usuarioActual');
+
+  if (guardado) {
+
+   this.usuario = JSON.parse(guardado);
+
+  } else {
+
+   this.router.navigate(['/login']);
+
+  }
+
+ }
+
+
+
+ cargarMascotas(): void {
+
+  this.cargandoMascotas = true;
+
+  this.mascotaService.obtenerMascotas().subscribe({
+
+  next: (data: AgregarMascota[]) => {
+
+    this.mascotas = data;
+
+    this.cargandoMascotas = false;
+
+    console.log('✅ Mascotas cargadas:', data);
+
+   },
+
+   error: (err: any) => {
+
+    console.error('❌ Error al cargar mascotas:', err);
+
+    this.cargandoMascotas = false;
+
+   }
+
+  });
+
+ }
+
+
+
+ abrirModalMascota(): void { this.modalMascota.abrirModal(); }
+
+ obtenerMascotas(): void { this.cargarMascotas(); }
+
+
+
+ cambiarSeccion(seccion: string):  void { this.seccionActiva = seccion; }
+
+ cambiarSubSeccion(sub: string):  void { this.subSeccionFicha = sub; }
+
+
+
+ iniciales(): string {
+
+  if (!this.usuario?.nombre) return '?';
+
+  return this.usuario.nombre.split(' ').map((n: string) => n[0]).join('').toUpperCase();
+
+ }
+
+
+
+ citasPendientes(): number {
+
+  return this.citas.filter(c => c.estado === 'confirmada' || c.estado === 'pendiente').length;
+
+ }
+
+
+
+ etiquetaEspecie(especie: string): string {
+
+  const mapa: Record<string, string> = {
+
+   perro: 'Canino', gato: 'Felino', conejo: 'Conejo', ave: 'Ave', otro: 'Otro'
+
   };
 
-  seccionActiva: string = 'mascotas';
-  // 🔥 Importante: Esta variable controla las pestañas de la Ficha Clínica
-  subSeccionFicha: string = 'historial'; 
-  mascotaSeleccionada: any = null;
+  return mapa[especie?.toLowerCase()] ?? especie;
 
-  mascotas = [
-    { id: 1, nombre: 'Luna', raza: 'Husky', especie: 'perro', edad: 3, peso: 18, emoji: '🐺', colorClase: 'azul' },
-    { id: 2, nombre: 'Simba', raza: 'Persa', especie: 'gato', edad: 5, peso: 4, emoji: '🐱', colorClase: 'naranja' }
-  ];
+ }
 
-  citas = [
-    { id: 101, fecha: new Date(), hora: '10:30', servicio: 'Vacunación', mascotaNombre: 'Luna', veterinario: 'Dr. Pérez', estado: 'confirmada' },
-    { id: 102, fecha: new Date(), hora: '16:00', servicio: 'Chequeo General', mascotaNombre: 'Simba', veterinario: 'Dra. Soto', estado: 'pendiente' }
-  ];
 
-  // 🔥 Renombrado de 'fichasClinicas' a 'fichas' para que coincida con el @for del HTML
-  fichas = [
-    {
-      id: 1,
-      fecha: new Date('2026-05-01'),
-      motivo: 'Vacuna Sextuple',
-      veterinario: 'Dr. Pérez',
-      peso: 18,
-      temperatura: '38.5°',
-      diagnostico: 'Salud óptima',
-      tratamiento: 'Refuerzo aplicado correctamente.',
-      notas: 'Siguiente refuerzo en 12 meses.'
-    }
-  ];
 
-  // 🔥 Añadidas para evitar errores TS2339
-  vacunas = [
-    { nombre: 'Sextuple', estado: 'al dia', fechaAplicacion: new Date(), proximaDosis: new Date(), lote: 'AB123' }
-  ];
+ formatFecha(fecha: any): string {
 
-medicamentos: any[] = [];
+  return new Date(fecha).toLocaleDateString('es-ES', {
 
-  constructor(private fb: FormBuilder, 
-        private router: Router, ) {
+   day: '2-digit', month: 'short', year: 'numeric'
 
-  }
+  });
 
-  ngOnInit(): void {}
+ }
 
-  // --- MÉTODOS ---
 
-  abrirModalMascota() {
-    this.modalMascota.abrirModal();
-  }
 
-  obtenerMascotas() {
-    console.log('Recargando mascotas desde el servidor...');
-    // Aquí iría la lógica de tu mascota-service.ts
-  }
+ nuevaCita(): void { console.log('Nueva cita...'); }
 
-  cambiarSeccion(seccion: string) {
-    this.seccionActiva = seccion;
-  }
 
-  verFicha(mascota: any) {
-    this.mascotaSeleccionada = mascota;
-    this.seccionActiva = 'ficha-clinica';
-  }
 
-  // 🔥 Este método faltaba y lo pide el (click) del HTML
-  cambiarSubSeccion(sub: string) {
-    this.subSeccionFicha = sub;
-  }
+ cerrarSesion(): void {
 
-  iniciales(): string {
-    return this.usuario.nombre.split(' ').map(n => n[0]).join('').toUpperCase();
-  }
+  sessionStorage.removeItem('usuarioActual');
 
-  citasPendientes(): number {
-    return this.citas.filter(c => c.estado === 'confirmada' || c.estado === 'pendiente').length;
-  }
+  this.router.navigate(['/']);
 
-  etiquetaEspecie(especie: string): string {
-    return especie === 'perro' ? 'Canino' : 'Felino';
-  }
+ }
 
-  formatFecha(fecha: any): string {
-    return new Date(fecha).toLocaleDateString('es-ES', { 
-      day: '2-digit', 
-      month: 'short', 
-      year: 'numeric' 
-    });
-  }
-
-  nuevaCita() { console.log('Nueva cita...'); }
-  cerrarSesion() : void { this.router.navigate(['/']); }
 }
