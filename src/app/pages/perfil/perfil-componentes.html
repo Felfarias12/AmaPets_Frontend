@@ -1,5 +1,6 @@
 <div class="perfil-page">
 
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <span class="sidebar-logo-icon">🐾</span>
@@ -45,14 +46,17 @@
       <button class="btn-nueva-cita" (click)="nuevaCita()">
         + Nueva cita
       </button>
+      <!-- CORREGIDO: Botón limpio sin etiquetas duplicadas -->
       <button class="btn-cerrar" (click)="cerrarSesion()">
         Cerrar sesión
       </button>
     </div>
   </aside>
 
+  <!-- CONTENIDO PRINCIPAL -->
   <main class="perfil-main">
 
+    <!-- Header -->
     <div class="main-header">
       <div>
         <h1 class="main-title">
@@ -74,6 +78,7 @@
       </div>
     </div>
 
+    <!-- ===== SECCIÓN MASCOTAS ===== -->
     @if (seccionActiva === 'mascotas') {
       <div class="mascotas-grid">
         @for (m of mascotas; track m.id) {
@@ -102,15 +107,18 @@
           </div>
         }
 
+        <!-- Tarjeta añadir mascota -->
         <div class="mascota-card mascota-add" (click)="abrirModalMascota()">
           <div class="add-icon">+</div>
           <p class="add-text">Añadir mascota</p>
         </div>
       </div>
 
+      <!-- Componente Modal para Mascotas -->
       <app-mascota-componentes #modalMascota (mascotaAgregada)="obtenerMascotas()"></app-mascota-componentes>
     }
 
+    <!-- ===== SECCIÓN CITAS ===== -->
     @if (seccionActiva === 'citas') {
       <div class="citas-lista">
         @for (c of citas; track c.id) {
@@ -140,9 +148,10 @@
       <button class="btn-accion" (click)="nuevaCita()">+ Agendar cita</button>
     }
 
-     @if (seccionActiva === 'ficha-clinica') {
+    <!-- ===== SECCIÓN FICHA CLÍNICA ===== -->
+    @if (seccionActiva === 'ficha-clinica') {
       <app-ficha-clinica-component></app-ficha-clinica-component>
     }
 
-   </main>
+  </main>
 </div>

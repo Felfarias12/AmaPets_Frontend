@@ -1,7 +1,9 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MascotaComponentes } from '../mascota-componentes/mascota-componentes';
+import { Router } from '@angular/router';
 import { FichaClinicaComponent } from '../ficha-clinica-component/ficha-clinica-component';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-perfil',
@@ -55,7 +57,10 @@ export class PerfilComponent implements OnInit {
 
 medicamentos: any[] = [];
 
-  constructor() {}
+  constructor(private fb: FormBuilder, 
+        private router: Router, ) {
+
+  }
 
   ngOnInit(): void {}
 
@@ -105,5 +110,5 @@ medicamentos: any[] = [];
   }
 
   nuevaCita() { console.log('Nueva cita...'); }
-  cerrarSesion() { console.log('Cerrar sesión...'); }
+  cerrarSesion() : void { this.router.navigate(['/']); }
 }
