@@ -12,12 +12,12 @@
     </div>
 
     <div class="sidebar-profile">
-      <div class="profile-avatar avatar-{{ veterinario.colorClase }}">
-        {{ veterinario.emoji }}
+      <div class="profile-avatar avatar-teal">
+        🩺
       </div>
       <div class="profile-info">
-        <p class="profile-nombre">{{ veterinario.nombre }}</p>
-        <p class="profile-rol">{{ veterinario.rol }}</p>
+        <p class="profile-nombre">Panel veterinario</p>
+        <p class="profile-rol">Atención clínica general</p>
       </div>
     </div>
 
@@ -49,7 +49,7 @@
     <!-- Header principal -->
     <header class="vet-header">
       <div class="header-left">
-        <p class="header-greeting">Buenos días, <strong>{{ veterinario.nombre }}</strong> 👋</p>
+        <p class="header-greeting">Buenos días, <strong>equipo de atención</strong> 👋</p>
         <p class="header-fecha">Sábado, 16 de Mayo de 2025</p>
       </div>
       <div class="header-right">
@@ -217,7 +217,7 @@
               </div>
               <div class="ficha-meta">
                 <p class="ficha-fecha">📅 {{ f.fecha }}</p>
-                <p class="ficha-vet">👩‍⚕️ {{ f.veterinario }}</p>
+                <p class="ficha-vet">🩺 {{ f.profesional }}</p>
               </div>
               <button class="btn-ver-ficha">Ver detalle →</button>
             </div>

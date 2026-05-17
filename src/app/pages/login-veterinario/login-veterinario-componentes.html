@@ -1,0 +1,118 @@
+<div class="login-page">
+
+  <!-- Panel izquierdo decorativo -->
+  <div class="login-aside">
+    <div class="center-logo">
+      <div class="aside-logo" (click)="irAInicio()">
+        <span class="aside-logo-icon">🩺</span>
+        <span class="aside-logo-text">AMAPETS VET</span>
+      </div>
+    </div>
+
+    <div class="center-aside">
+      <div class="aside-content">
+        <h2 class="aside-title">Portal Veterinario</h2>
+        <p class="aside-desc">Accede a tu cuenta profesional para gestionar citas y fichas clínicas.</p>
+        <div class="aside-features">
+          <div class="aside-feature">
+            <span class="feature-icon">📅</span>
+            <span>Gestión de citas</span>
+          </div>
+          <div class="aside-feature">
+            <span class="feature-icon">📋</span>
+            <span>Fichas clínicas</span>
+          </div>
+          <div class="aside-feature">
+            <span class="feature-icon">🐾</span>
+            <span>Base de pacientes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="aside-bubbles">
+      <div class="ab ab1"></div>
+      <div class="ab ab2"></div>
+      <div class="ab ab3"></div>
+    </div>
+  </div>
+
+  <!-- Panel derecho con formulario -->
+  <div class="login-main">
+    <div class="login-card">
+
+      <div class="login-header">
+        <h1 class="login-title">Iniciar sesión profesional</h1>
+        <p class="login-subtitle">Acceso veterinarios</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()" novalidate>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Correo electrónico profesional</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉️</span>
+            <input
+              id="email"
+              type="email"
+              formControlName="correo"
+              placeholder="veterinario@clinica.com"
+              title="Correo electrónico"
+              autocomplete="email">
+          </div>
+          @if (f['correo'].invalid && f['correo'].touched) {
+            <span class="form-error">
+              @if (f['correo'].errors?.['required']) { El correo es obligatorio }
+              @if (f['correo'].errors?.['email']) { Ingresa un correo válido }
+            </span>
+          }
+        </div>
+
+        <!-- Contraseña -->
+        <div class="form-group">
+          <label for="contrasena">Contraseña</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input
+              id="contrasena"
+              [type]="mostrarPassword ? 'text' : 'password'"
+              formControlName="contrasena"
+              placeholder="Mínimo 6 caracteres"
+              title="Contraseña"
+              autocomplete="current-password">
+            <button type="button" class="toggle-pass" (click)="togglePassword()">
+              {{ mostrarPassword ? '🙈' : '👁️' }}
+            </button>
+          </div>
+          @if (f['contrasena'].invalid && f['contrasena'].touched) {
+            <span class="form-error">
+              @if (f['contrasena'].errors?.['required']) { La contraseña es obligatoria }
+              @if (f['contrasena'].errors?.['minlength']) { Mínimo 6 caracteres }
+            </span>
+          }
+        </div>
+
+        @if (errorMsg) {
+          <div class="login-error">{{ errorMsg }}</div>
+        }
+
+        <button type="submit" class="btn-login" [class.loading]="cargando" [disabled]="cargando">
+          @if (cargando) {
+            <span class="spinner"></span> Ingresando...
+          } @else {
+            Ingresar
+          }
+        </button>
+
+      </form>
+
+      <div class="login-footer">
+        <span>¿Eres nuevo?</span>
+        <a class="register-link" (click)="irARegistro()">Regístrate aquí</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>

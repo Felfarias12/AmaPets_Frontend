@@ -16,7 +16,7 @@ export class VeterinarioService {
   }
 
   crearVeterinario(veterinario: Veterinario): Observable<Veterinario> {
-    return this.http.post<Veterinario>(environment.apiUrlVeterinarios, veterinario);
+    return this.http.post<Veterinario>(`${environment.apiUrlVeterinarios}/login`, veterinario);
   }
 
   editarVeterinario(veterinario: Veterinario): Observable<Veterinario> {

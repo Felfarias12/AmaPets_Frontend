@@ -5,4 +5,6 @@ export interface Veterinario {
   especialidades: string[];
   emoji: string;
   colorClase: 'teal' | 'coral' | 'amber';
+  correo?: string;
+  contrasena?: string;
 }

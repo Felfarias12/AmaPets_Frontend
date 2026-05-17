@@ -249,6 +249,63 @@ body {
   &:hover { background: rgba($teal, 0.08); }
 }
 
+// Botones de veterinario
+.nav-buttons {
+  @include flex(center, center, 12px);
+}
+
+.nav-vet {
+  background: $teal;
+  color: white;
+  font-family: $font-sans;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 18px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+
+  &:hover { background: $teal-dark; transform: translateY(-1px); }
+}
+
+.hero-vet-actions {
+  @include flex(center, flex-start, 12px);
+  margin-top: 10px;
+  padding-top: 16px;
+  border-top: 1px solid rgba($teal-dark, 0.2);
+}
+
+.btn-vet-primary {
+  background: $coral;
+  color: white;
+  font-family: $font-sans;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 26px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+
+  &:hover { background: color.adjust($coral, $lightness: -8%); transform: translateY(-2px); }
+}
+
+.btn-vet-outline {
+  background: transparent;
+  color: $coral;
+  font-family: $font-sans;
+  font-size: 14px;
+  font-weight: 700;
+  border: 2px solid $coral;
+  border-radius: 10px;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover { background: rgba($coral, 0.08); }
+}
+
 .hero-stats {
   @include flex(flex-start, flex-start, 32px);
   padding-top: 6px;

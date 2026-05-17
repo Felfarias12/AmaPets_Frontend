@@ -52,14 +52,6 @@ export class VeterinarioComponent {
   busqueda = signal('');
   fichaEnviada = signal(false);
 
-  // Datos del veterinario en sesión
-  veterinario = {
-    nombre: 'Dra. Carmen Rojas',
-    rol: 'Médica Veterinaria · Cardiología',
-    emoji: '👩‍⚕️',
-    colorClase: 'teal' as const,
-  };
-
   // Estadísticas del día
   estadisticas = [
     { valor: '8',  etiqueta: 'Citas hoy',         icono: '📅', color: 'teal'   },
@@ -94,11 +86,11 @@ export class VeterinarioComponent {
 
   // Fichas clínicas recientes
   fichasRecientes = [
-    { id:1, mascota:'Luna',   fecha:'16 May 2025', motivo:'Control rutinario',    diagnostico:'Saludable',          veterinario:'Dra. Carmen Rojas', emoji:'🐱' },
-    { id:2, mascota:'Rocky',  fecha:'16 May 2025', motivo:'Vacunación anual',     diagnostico:'Sin anomalías',      veterinario:'Dra. Carmen Rojas', emoji:'🐶' },
-    { id:3, mascota:'Bolt',   fecha:'14 May 2025', motivo:'Cojera miembro post.', diagnostico:'Esguince leve',      veterinario:'Dra. Carmen Rojas', emoji:'🐶' },
-    { id:4, mascota:'Simba',  fecha:'10 May 2025', motivo:'Revisión dental',      diagnostico:'Sarro moderado',     veterinario:'Dra. Carmen Rojas', emoji:'🐱' },
-    { id:5, mascota:'Perla',  fecha:'05 May 2025', motivo:'Control cardíaco',     diagnostico:'Soplo grado II',     veterinario:'Dra. Carmen Rojas', emoji:'🐱' },
+    { id:1, mascota:'Luna',   fecha:'16 May 2025', motivo:'Control rutinario',    diagnostico:'Saludable',          profesional:'Equipo veterinario', emoji:'🐱' },
+    { id:2, mascota:'Rocky',  fecha:'16 May 2025', motivo:'Vacunación anual',     diagnostico:'Sin anomalías',      profesional:'Equipo veterinario', emoji:'🐶' },
+    { id:3, mascota:'Bolt',   fecha:'14 May 2025', motivo:'Cojera miembro post.', diagnostico:'Esguince leve',      profesional:'Equipo veterinario', emoji:'🐶' },
+    { id:4, mascota:'Simba',  fecha:'10 May 2025', motivo:'Revisión dental',      diagnostico:'Sarro moderado',     profesional:'Equipo veterinario', emoji:'🐱' },
+    { id:5, mascota:'Perla',  fecha:'05 May 2025', motivo:'Control cardíaco',     diagnostico:'Soplo grado II',     profesional:'Equipo veterinario', emoji:'🐱' },
   ];
 
   // Formulario nueva ficha

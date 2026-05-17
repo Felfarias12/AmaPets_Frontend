@@ -1,0 +1,152 @@
+<div class="registro-page">
+  <div class="registro-main">
+    <div class="registro-card">
+
+      <div class="registro-header">
+        <div class="header-logo">🩺</div>
+        <h1 class="registro-title">Registro de Veterinarios</h1>
+        <p class="registro-subtitle">Únete al equipo profesional de AmaPets</p>
+      </div>
+
+      @if (!veterinarioCreado) {
+      <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" novalidate>
+
+        <!-- Nombre -->
+        <div class="form-group">
+          <label for="nombre">Nombre completo</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" id="nombre" formControlName="nombre" placeholder="Dr. Juan Pérez" class="form-control">
+          </div>
+          @if (f['nombre'].invalid && f['nombre'].touched) {
+            <span class="form-error">El nombre es obligatorio (mín. 3 caracteres)</span>
+          }
+        </div>
+
+        <!-- Edad -->
+        <div class="form-group">
+          <label for="edad">Edad</label>
+          <div class="input-wrap">
+            <span class="input-icon">🎂</span>
+            <input type="number" id="edad" formControlName="edad" placeholder="35" class="form-control" min="1">
+          </div>
+          @if (f['edad'].invalid && f['edad'].touched) {
+            <span class="form-error">Ingresa una edad válida</span>
+          }
+        </div>
+
+        <!-- Género -->
+        <div class="form-group">
+          <label for="genero">Género</label>
+          <div class="input-wrap">
+            <span class="input-icon">⚧️</span>
+            <select id="genero" formControlName="genero" class="form-control">
+              <option value="">Selecciona una opción</option>
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+          @if (f['genero'].invalid && f['genero'].touched) {
+            <span class="form-error">Selecciona un género</span>
+          }
+        </div>
+
+        <!-- Correo Electrónico -->
+        <div class="form-group">
+          <label for="correo">Correo electrónico profesional</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉️</span>
+            <input
+              id="correo"
+              type="email"
+              formControlName="correo"
+              placeholder="veterinario@clinica.com"
+              class="form-control"
+              autocomplete="email">
+          </div>
+          @if (f['correo'].invalid && f['correo'].touched) {
+            <span class="form-error">
+              @if (f['correo'].errors?.['required']) { El correo es obligatorio }
+              @else if (f['correo'].errors?.['email']) { Ingresa un correo válido }
+            </span>
+          }
+        </div>
+
+        <!-- Contraseña -->
+        <div class="form-group">
+          <label for="contrasena">Contraseña</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input
+              id="contrasena"
+              [type]="mostrarPassword ? 'text' : 'password'"
+              formControlName="contrasena"
+              placeholder="Mínimo 6 caracteres"
+              class="form-control"
+              autocomplete="new-password">
+            <button type="button" class="toggle-pass" (click)="togglePassword()">
+              {{ mostrarPassword ? '👁️‍🗨️' : '👁️' }}
+            </button>
+          </div>
+          @if (f['contrasena'].invalid && f['contrasena'].touched) {
+            <span class="form-error">
+              @if (f['contrasena'].errors?.['required']) { La contraseña es obligatoria }
+              @if (f['contrasena'].errors?.['minlength']) { Mínimo 6 caracteres }
+            </span>
+          }
+        </div>
+
+        @if (errorMsg) {
+          <div class="registro-error">{{ errorMsg }}</div>
+        }
+
+        <button type="submit" class="btn-registro" [disabled]="cargando">
+          {{ cargando ? 'Registrando...' : 'Registrarse' }}
+        </button>
+      </form>
+      } @else {
+        <div class="exito-container">
+          <span class="exito-icon">✅</span>
+          <p class="exito-titulo">¡Registro completado!</p>
+          <p class="exito-desc">Tu perfil ha sido creado exitosamente. Ya puedes iniciar sesión.</p>
+          <button class="btn-registro" (click)="irALogin()">Ir a iniciar sesión</button>
+        </div>
+      }
+
+      <!-- Listado de Veterinarios -->
+      <div class="veterinarios-lista" id="veterinarios">
+        <h2 class="veterinarios-title">Veterinarios registrados</h2>
+        @if (veterinarios.length === 0) {
+          <p class="veterinarios-vacio">Todavía no hay veterinarios registrados.</p>
+        } @else {
+          <div class="veterinarios-grid">
+            @for (vet of veterinarios; track vet.id_veterinario) {
+              <article class="vet-card">
+                <div class="vet-info">
+                  <p class="vet-nombre">{{ vet.nombre }}</p>
+                  <p class="vet-correo">{{ vet.correo }}</p>
+                  <p class="vet-rol">Edad: {{ vet.edad }}</p>
+                  <p class="vet-rol">Género: {{ vet.genero }}</p>
+                  <div class="vet-actions-section">
+                    <p class="vet-actions-title">Acciones</p>
+                    <div class="vet-actions">
+                      <button type="button" class="action-btn" (click)="iniciarEdicion(vet)">Editar</button>
+                      <button type="button" class="action-btn danger" (click)="eliminarVeterinario(vet.id_veterinario)">Eliminar</button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="registro-footer">
+        <span>¿Ya tienes cuenta?</span>
+        <a class="login-link" (click)="irALogin()">Inicia sesión</a>
+      </div>
+
+    </div>
+  </div>
+</div>
