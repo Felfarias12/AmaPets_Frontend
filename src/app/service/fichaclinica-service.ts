@@ -18,7 +18,7 @@ export class FichaClinicaService {
   }
 
   crearFicha(ficha: agregarFichaClinica): Observable<agregarFichaClinica> {
-    return this.http.post<agregarFichaClinica>(environment.apiUrlFichasClinicas, ficha);
+    return this.http.post<agregarFichaClinica>(`${environment.apiUrlFichasClinicas}/crear`, ficha);
   }
 
   editarFicha(ficha: agregarFichaClinica): Observable<agregarFichaClinica> {
