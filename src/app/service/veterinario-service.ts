@@ -8,7 +8,8 @@ import { Veterinario } from '../models/veterinario.model';
 })
 export class VeterinarioService {
 
-  private http = inject(HttpClient);
+  private http
+   = inject(HttpClient);
 
   obtenerVeterinarios(): Observable<Veterinario[]> {
     return this.http.get<Veterinario[]>(environment.apiUrlVeterinarios);
