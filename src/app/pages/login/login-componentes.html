@@ -59,15 +59,15 @@
             <input
               id="email"
               type="email"
-              formControlName="email"
+              formControlName="correo"
               placeholder="tu@email.com"
               title="Correo electrónico"
               autocomplete="email">
           </div>
-          @if (f['email'].invalid && f['email'].touched) {
+          @if (f['correo'].invalid && f['correo'].touched) {
             <span class="form-error">
-              @if (f['email'].errors?.['required']) { El email es obligatorio }
-              @if (f['email'].errors?.['email']) { Ingresa un email válido }
+              @if (f['correo'].errors?.['required']) { El correo es obligatorio }
+              @if (f['correo'].errors?.['email']) { Ingresa un correo válido }
             </span>
           }
         </div>
