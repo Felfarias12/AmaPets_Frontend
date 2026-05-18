@@ -1,0 +1,60 @@
+<div class="modal-overlay" *ngIf="mostrarModal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>Añadir nueva mascota</h2>
+    </div>
+
+    <form [formGroup]="mascotaForm" (ngSubmit)="guardarMascota()">
+      <div class="form-group">
+        <label>Nombre de la mascota</label>
+        <input type="text" formControlName="nombre" placeholder="Ej. Toby">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Especie</label>
+          <select formControlName="especie">
+            <option value="perro">Canino (Perro)</option>
+            <option value="gato">Felino (Gato)</option>
+            <option value="conejo">Conejo</option>
+            <option value="ave">Ave</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Género</label>
+          <select formControlName="genero">
+            <option value="">Selecciona género</option>
+            <option value="Macho">Macho</option>
+            <option value="Hembra">Hembra</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Edad (Años)</label>
+          <input type="number" formControlName="edad" min="0">
+        </div>
+        <div class="form-group">
+          <label>Peso (kg)</label>
+          <input type="number" formControlName="peso" step="0.1">
+        </div>
+      </div>
+
+      <div class="upload-section">
+        <label>Subir una foto (Opcional)</label>
+        <div class="upload-placeholder">
+          <i class="upload-icon"></i>
+          <input type="file" (change)="onFileSelected($event)" class="file-input">
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="cerrarModal()">Cancelar</button>
+        <button type="submit" class="btn-save" [disabled]="mascotaForm.invalid">Guardar mascota</button>
+      </div>
+    </form>
+  </div>
+</div>

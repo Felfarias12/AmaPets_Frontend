@@ -1,0 +1,490 @@
+// =============================================
+// AMAPETS — Registro Veterinario
+// =============================================
+@use 'sass:color';
+
+// ---- Tokens de color (del inicio) ----
+$teal:        #1D9E75;
+$teal-light:  #E1F5EE;
+$teal-dark:   #0F6E56;
+$teal-deep:   #085041;
+
+$coral:       #D85A30;
+$coral-light: #FAECE7;
+$coral-mid:   #F0997B;
+
+$amber:       #BA7517;
+$amber-light: #FAEEDA;
+$amber-mid:   #EF9F27;
+
+$purple:      #534AB7;
+$purple-light:#EEEDFE;
+
+$green-mid:   #639922;
+$green-dark:  #27500A;
+$green-deep:  #173404;
+
+$text:        #1a1a1a;
+$muted:       #6b7280;
+$bg:          #ffffff;
+$bg2:         #f9fafb;
+$border:      rgba(0,0,0,0.08);
+
+// ---- Tipografía ----
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fraunces:ital,wght@0,700;1,700&display=swap');
+
+$font-sans:   'Nunito', sans-serif;
+$font-serif:  'Fraunces', serif;
+
+// ---- Mixins ----
+@mixin flex($align: center, $justify: flex-start, $gap: 0) {
+  display: flex;
+  align-items: $align;
+  justify-content: $justify;
+  gap: $gap;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: $font-sans;
+  color: $text;
+  background: $bg;
+  -webkit-font-smoothing: antialiased;
+}
+
+.registro-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f9fafb 0%, #E1F5EE 50%, #FAEEDA 100%);
+  padding: 2rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.registro-page::before {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba($teal, 0.08) 0%, transparent 100%);
+  border-radius: 50%;
+  top: -100px;
+  left: -100px;
+  z-index: 0;
+}
+
+.registro-page::after {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba($coral, 0.08) 0%, transparent 100%);
+  border-radius: 50%;
+  bottom: -50px;
+  right: -50px;
+  z-index: 0;
+}
+
+.registro-main {
+  width: 100%;
+  max-width: 900px;
+  position: relative;
+  z-index: 1;
+}
+
+.registro-card {
+  background: $bg;
+  border-radius: 14px;
+  padding: 3rem 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba($teal, 0.1);
+  border: 0.5px solid rgba($teal, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.registro-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid rgba($teal, 0.1);
+}
+
+.header-logo {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, $teal-light, $coral-light);
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba($teal, 0.15);
+}
+
+.registro-title {
+  font-family: $font-serif;
+  font-size: 2rem;
+  font-style: italic;
+  color: $teal-dark;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.registro-subtitle {
+  color: $muted;
+  font-size: 0.95rem;
+}
+
+form {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 0;
+
+  label {
+    display: block;
+    font-weight: 600;
+    color: $text;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 1.2rem;
+  pointer-events: none;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 0.5px solid $border;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: $font-sans;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $teal;
+    box-shadow: 0 0 0 3px rgba($teal, 0.1);
+  }
+}
+
+.toggle-pass {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.form-error {
+  color: #d32f2f;
+  font-size: 0.85rem;
+  margin-top: 0.35rem;
+  display: block;
+}
+
+.especialidades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.especialidad-btn {
+  padding: 0.6rem 0.75rem;
+  border: 2px solid $border;
+  background: $bg;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  color: $muted;
+  font-weight: 500;
+
+  &:hover {
+    border-color: $teal;
+    color: $teal;
+    box-shadow: 0 2px 8px rgba($teal, 0.1);
+  }
+
+  &.selected {
+    background: linear-gradient(135deg, rgba($teal, 0.9), rgba($green-mid, 0.9));
+    color: white;
+    border-color: $teal;
+    box-shadow: 0 4px 12px rgba($teal, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+.registro-error {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-top: -0.75rem;
+}
+
+.btn-registro {
+  padding: 0.9rem 1.5rem;
+  background: linear-gradient(135deg, $green-mid 0%, $teal 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  box-shadow: 0 4px 12px rgba($green-mid, 0.2);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, color.adjust($green-mid, $lightness: -8%) 0%, color.adjust($teal, $lightness: -8%) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba($green-mid, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.exito-container {
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba($green-mid, 0.08) 0%, rgba($teal, 0.08) 100%);
+  border: 2px solid rgba($green-mid, 0.3);
+  border-radius: 10px;
+  margin: 2rem 0;
+  box-shadow: 0 4px 16px rgba($green-mid, 0.1);
+}
+
+.exito-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.exito-titulo {
+  font-size: 1.5rem;
+  color: $teal-dark;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.exito-desc {
+  color: $teal;
+  margin-bottom: 1.5rem;
+}
+
+.veterinarios-lista {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 0.5px solid $border;
+}
+
+.veterinarios-title {
+  font-family: $font-serif;
+  font-size: 1.3rem;
+  font-style: italic;
+  color: $teal-dark;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+}
+
+.veterinarios-vacio {
+  color: $muted;
+  text-align: center;
+  padding: 2rem;
+  background: $bg2;
+  border-radius: 8px;
+}
+
+.veterinarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.vet-card {
+  background: $bg2;
+  border: 0.5px solid $border;
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, $teal, $coral, $green-mid);
+  }
+
+  &:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+    border-color: $teal;
+  }
+}
+
+.vet-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-weight: 600;
+
+  &.avatar-teal {
+    background: linear-gradient(135deg, $teal, $green-mid);
+  }
+
+  &.avatar-coral {
+    background: linear-gradient(135deg, $coral, $amber-mid);
+  }
+
+  &.avatar-amber {
+    background: linear-gradient(135deg, $amber, $amber-mid);
+  }
+}
+
+.vet-info p {
+  margin: 0.25rem 0;
+  color: $text;
+}
+
+.vet-nombre {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.vet-rol {
+  font-size: 0.85rem;
+  color: $muted;
+}
+
+.vet-correo {
+  font-size: 0.85rem;
+  color: $muted;
+  word-break: break-word;
+}
+
+.vet-especialidades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+}
+
+.esp-tag {
+  background: linear-gradient(135deg, rgba($teal, 0.15), rgba($green-mid, 0.15));
+  color: $teal-dark;
+  padding: 0.35rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 0.5px solid rgba($teal, 0.2);
+}
+
+.vet-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  background: linear-gradient(135deg, $teal, $green-mid);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+
+  &:hover {
+    background: linear-gradient(135deg, color.adjust($teal, $lightness: -8%), color.adjust($green-mid, $lightness: -8%));
+    box-shadow: 0 4px 12px rgba($teal, 0.2);
+    transform: translateY(-2px);
+  }
+
+  &.danger {
+    background: linear-gradient(135deg, #ef5350, #e53935);
+
+    &:hover {
+      background: linear-gradient(135deg, #e53935, #d32f2f);
+      box-shadow: 0 4px 12px rgba(#ef5350, 0.2);
+    }
+  }
+}
+
+.registro-footer {
+  text-align: center;
+  margin-top: 2rem;
+  color: $muted;
+  font-size: 0.9rem;
+
+  .login-link {
+    color: $teal;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .registro-card {
+    padding: 2rem 1rem;
+  }
+
+  .registro-title {
+    font-size: 1.5rem;
+  }
+
+  .especialidades-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .veterinarios-grid {
+    grid-template-columns: 1fr;
+  }
+}

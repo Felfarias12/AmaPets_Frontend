@@ -13,7 +13,10 @@
       <li><a (click)="scrollA('contacto')">Contacto</a></li>
     </ul>
 
-    <button class="nav-cta" (click)="irALogin()">Iniciar Sesion</button>
+    <div class="nav-buttons">
+      <button class="nav-vet" (click)="irALoginVeterinario()" title="Acceso veterinarios">🩺 Veterinarios</button>
+      <button class="nav-cta" (click)="irALogin()">Iniciar Sesion</button>
+    </div>
   </div>
 </nav>
 
@@ -38,6 +41,11 @@
     <div class="hero-actions">
       <button class="btn-primary" (click)="scrollA('citas')">Reservar cita</button>
       <button class="btn-outline" (click)="scrollA('servicios')">Ver servicios</button>
+    </div>
+
+    <div class="hero-vet-actions">
+      <button class="btn-vet-primary" (click)="irALoginVeterinario()">🩺 Login Veterinario</button>
+      <button class="btn-vet-outline" (click)="irARegistroVeterinario()">Registrar Veterinario</button>
     </div>
 
     <div class="hero-stats">

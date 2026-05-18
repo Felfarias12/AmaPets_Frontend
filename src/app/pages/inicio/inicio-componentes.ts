@@ -319,4 +319,12 @@ export class InicioComponent implements OnInit {
   irALogin(): void {
     this.router.navigate(['/login']);
   }
+
+  irALoginVeterinario(): void {
+    this.router.navigate(['/login-veterinario']);
+  }
+
+  irARegistroVeterinario(): void {
+    this.router.navigate(['/registro-veterinario']);
+  }
 }

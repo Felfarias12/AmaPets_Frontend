@@ -2,32 +2,29 @@
 
   <!-- Panel izquierdo decorativo -->
   <div class="login-aside">
-  
     <div class="center-logo">
       <div class="aside-logo" (click)="irAInicio()">
-        <span class="aside-logo-icon">🐾</span>
-        <span class="aside-logo-text">AMAPETS</span>
+        <span class="aside-logo-icon">🩺</span>
+        <span class="aside-logo-text">AMAPETS VET</span>
       </div>
     </div>
- 
 
     <div class="center-aside">
       <div class="aside-content">
-        <h2 class="aside-title">Bienvenido de vuelta</h2>
-        <p class="aside-desc">Accede a tu cuenta para gestionar las citas y el perfil de tus mascotas.</p>
-  
+        <h2 class="aside-title">Portal Veterinario</h2>
+        <p class="aside-desc">Accede a tu cuenta profesional para gestionar citas y fichas clínicas.</p>
         <div class="aside-features">
           <div class="aside-feature">
+            <span class="feature-icon">📅</span>
+            <span>Gestión de citas</span>
+          </div>
+          <div class="aside-feature">
             <span class="feature-icon">📋</span>
-            <span>Historial de citas</span>
+            <span>Fichas clínicas</span>
           </div>
           <div class="aside-feature">
-            <span class="feature-icon">🐶</span>
-            <span>Perfil de tus mascotas</span>
-          </div>
-          <div class="aside-feature">
-            <span class="feature-icon">🔔</span>
-            <span>Recordatorios automáticos</span>
+            <span class="feature-icon">🐾</span>
+            <span>Base de pacientes</span>
           </div>
         </div>
       </div>
@@ -45,22 +42,22 @@
     <div class="login-card">
 
       <div class="login-header">
-        <h1 class="login-title">Iniciar sesión</h1>
-        <p class="login-subtitle">Ingresa tus credenciales para continuar</p>
+        <h1 class="login-title">Iniciar sesión profesional</h1>
+        <p class="login-subtitle">Acceso veterinarios</p>
       </div>
 
       <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()" novalidate>
 
         <!-- Email -->
         <div class="form-group">
-          <label for="email">Correo electrónico</label>
+          <label for="email">Correo electrónico profesional</label>
           <div class="input-wrap">
             <span class="input-icon">✉️</span>
             <input
               id="email"
               type="email"
               formControlName="correo"
-              placeholder="tu@email.com"
+              placeholder="veterinario@clinica.com"
               title="Correo electrónico"
               autocomplete="email">
           </div>
@@ -96,10 +93,6 @@
           }
         </div>
 
-        <div class="form-extras">
-          <a class="forgot-link">¿Olvidaste tu contraseña?</a>
-        </div>
-
         @if (errorMsg) {
           <div class="login-error">{{ errorMsg }}</div>
         }
@@ -115,7 +108,7 @@
       </form>
 
       <div class="login-footer">
-        <span>¿No tienes cuenta?</span>
+        <span>¿Eres nuevo?</span>
         <a class="register-link" (click)="irARegistro()">Regístrate aquí</a>
       </div>
 

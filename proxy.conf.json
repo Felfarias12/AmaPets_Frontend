@@ -10,5 +10,11 @@
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
+  },
+  "/veterinarios": {
+    "target": "http://localhost:7576",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
   }
 }

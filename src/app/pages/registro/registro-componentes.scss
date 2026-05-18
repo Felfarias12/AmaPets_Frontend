@@ -142,6 +142,15 @@ body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
     padding: 40px 32px;
 }
 
+//.registro-card{
+//    background: $bg;
+//    border: 0.5px solid $border;
+//    border-radius: 20px;
+//    padding: 44px 40px;
+//    width: 100%;
+//    max-width: 700px;
+//}
+
 .registro-card{
     background: $bg;
     border: 0.5px solid $border;
@@ -150,7 +159,6 @@ body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
     width: 100%;
     max-width: 700px;
 }
-
 .registro-header{
     margin-bottom: 32px;
 }
@@ -330,4 +338,53 @@ body { font-family: $font-sans; -webkit-font-smoothing: antialiased; }
   .login-aside { display: none; }
   .login-main { min-height: 100vh; padding: 24px 16px; }
   .login-card { padding: 32px 24px; }
+}
+
+
+.usuario-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.usuario-card {
+  background: $bg; border: 1px solid $border;
+  border-radius: 12px; padding: 16px;
+  display: flex; justify-content: space-between;
+  transition: box-shadow 0.2s;
+
+  &:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+}
+
+.usuario-info {
+  background: $bg; border: 1px solid $border;
+  border-radius: 5px; margin-bottom: 16px;
+  overflow: hidden; transition: box-shadow 0.2s;
+  &:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+  margin-top: 24px;
+
+}
+
+.usuario-actions {
+  display: flex; gap: 12px;
+
+
+}
+
+.action-btn{
+  background: #2e7d32; color: white; border: none;
+  padding: 8px 14px; border-radius: 6px;
+  font-weight: bold; cursor: pointer; font-size: 0.9rem;
+  white-space: nowrap;
+  &:hover { background: $green-deep; }
+
+
+  action-btn.danger {
+    background: #c62828;
+    &:hover { background: color.adjust(#c62828, $lightness: -10%); }
+  }
+}
+
+usuario-title {
+  font-size: 18px; font-weight: 600; color: $teal-dark;
+  align-items: right;
 }

@@ -1,1 +1,129 @@
-<p>ficha-clinica-component works!</p>
+<!-- ── Header de la mascota ─────────────────────────────────────────── -->
+<div class="mascota-header-card">
+  <div class="header-main">
+    <span class="avatar-grande">{{ _mascota.emoji }}</span>
+    <div class="header-datos">
+      <div class="title-row">
+        <h2>{{ _mascota.nombre }}</h2>
+        <span class="tag-especie">{{ _mascota.especie | uppercase }}</span>
+        <span class="tag-check" *ngIf="_mascota.esterilizada">✓ ESTERILIZADA</span>
+      </div>
+      <p class="sub-datos">
+        {{ _mascota.raza }} · {{ _mascota.genero }} · {{ _mascota.edad }} año{{ _mascota.edad !== 1 ? 's' : '' }} · {{ _mascota.color }}
+      </p>
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-pill">
+      <strong>{{ _mascota.peso }} kg</strong>
+      <span>PESO</span>
+    </div>
+    <div class="stat-pill">
+      <strong>{{ fichas.length }}</strong>
+      <span>CONSULTAS</span>
+    </div>
+    <div class="stat-pill">
+      <strong>{{ vacunas.length }}</strong>
+      <span>VACUNAS</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Pestañas + botón nueva consulta ──────────────────────────────── -->
+<div class="sub-nav-container">
+  <div class="tabs-internas">
+    <button (click)="cambiarSubSeccion('historial')" [class.active]="subSeccion === 'historial'">
+      📋 Historial clínico
+    </button>
+    <button (click)="cambiarSubSeccion('vacunas')" [class.active]="subSeccion === 'vacunas'">
+      💉 Vacunación
+    </button>
+    <button (click)="cambiarSubSeccion('medicamentos')" [class.active]="subSeccion === 'medicamentos'">
+      💊 Medicamentos
+    </button>
+  </div>
+  <button class="btn-nueva-consulta" (click)="abrirModal()">➕ Nueva Consulta</button>
+</div>
+
+<!-- ── Lista de fichas ───────────────────────────────────────────────── -->
+<div class="ficha-body">
+  <p class="no-data" *ngIf="fichasFiltradas.length === 0">
+    No hay registros para mostrar en esta sección.
+  </p>
+
+  <div class="card-historial" *ngFor="let f of fichasFiltradas">
+    <div class="card-historial-top">
+      <div class="fecha-box">
+        <span class="dia">{{ f.fecha | date:'dd' }}</span>
+        <span class="mes">{{ f.fecha | date:'MMM' | uppercase }}</span>
+      </div>
+      <div class="motivo-box">
+        <h3>{{ f.motivo }}</h3>
+        <p>👨‍⚕️ {{ f.veterinario }}</p>
+      </div>
+      <div class="stats-box">
+        <span>⚖️ {{ f.peso }} kg</span>
+        <span>🌡️ {{ f.temperatura }}</span>
+      </div>
+    </div>
+    <div class="card-historial-detalles">
+      <p><strong>DIAGNÓSTICO:</strong> {{ f.diagnostico }}</p>
+      <p><strong>TRATAMIENTO:</strong> {{ f.tratamiento }}</p>
+      <p *ngIf="f.notas"><strong>NOTAS:</strong> <em>{{ f.notas }}</em></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modal nueva consulta ─────────────────────────────────────────── -->
+<div class="modal-overlay" *ngIf="mostrarModal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>Registrar Atención para {{ _mascota.nombre }}</h2>
+    </div>
+
+    <form [formGroup]="fichaForm" (ngSubmit)="guardarFicha()">
+      <div class="form-group">
+        <label>Motivo / Procedimiento</label>
+        <input type="text" formControlName="motivo" placeholder="Ej: Vacuna Sextuple o Control de rutina">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Peso (kg)</label>
+          <input type="number" formControlName="peso" step="0.1" min="0">
+        </div>
+        <div class="form-group">
+          <label>Temperatura</label>
+          <input type="text" formControlName="temperatura" placeholder="Ej: 38.5°C">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Veterinario</label>
+        <input type="text" formControlName="veterinario" placeholder="Nombre del profesional">
+      </div>
+
+      <div class="form-group">
+        <label>Diagnóstico</label>
+        <textarea formControlName="diagnostico" rows="2"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Tratamiento</label>
+        <textarea formControlName="tratamiento" rows="2"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Notas (opcional)</label>
+        <input type="text" formControlName="notas" placeholder="Observaciones adicionales">
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="cerrarModal()">Cancelar</button>
+        <button type="submit" class="btn-save" [disabled]="fichaForm.invalid || guardando">
+          {{ guardando ? 'Guardando...' : 'Guardar ficha' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
