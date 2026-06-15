@@ -1,10 +1,9 @@
 export const environment = {
     production: true,
-    apiUrlConsultas: 'http://localhost:7583/consultas',
-    apiUrlRegistros: 'http://localhost:7575/usuarios',
-    apiUrlMascotas: 'http://localhost:7579/mascotas',
-    apiUrlUsuarios: 'http://localhost:7575/usuarios',
-    apiUrlFichasClinicas: 'http://localhost:7577/fichas',
-    apiUrlVeterinarios: 'http://localhost:7576/veterinarios'
-
+    apiUrlRegistros: 'http://98.89.248.191/usuario/usuarios',
+    apiUrlUsuarios: 'http://98.89.248.191/usuario/usuarios',
+    apiUrlMascotas: 'http://98.89.248.191/mascota/mascotas',
+    apiUrlConsultas: 'http://98.89.248.191/consultas/consultas',
+    apiUrlFichasClinicas: 'http://98.89.248.191/fichas/fichas',
+    apiUrlVeterinarios: 'http://98.89.248.191/veterinario/veterinarios'
 }
